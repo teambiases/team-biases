@@ -1,0 +1,7 @@
+# Eclipse files
+.project
+.pydevproject
+
+# Compiled python files
+__pycache__
+
