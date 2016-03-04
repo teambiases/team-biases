@@ -81,10 +81,18 @@ def get_article_versions(seed, langs):
     
     explored = set()
     frontier = {seed}
+    is_seed = True
     
     while frontier:
         article = frontier.pop()
-        explored.add(article)
+        # Don't add the seed article to explored because it could have a title
+        # with underscores, or it could be a redirect, or something else that
+        # would lead this method to have inconsistent results when called with
+        # other page titles
+        if is_seed:
+            is_seed = False
+        else:
+            explored.add(article)
         lang, title = article
         page = mwclient_site(lang).pages[title]
         for langlink in page.langlinks():
@@ -97,6 +105,7 @@ def get_article_versions(seed, langs):
     lang_cache = ARTICLE_VERSIONS_CACHE[langs_key]
     for article in explored:
         lang_cache[article] = explored
+    lang_cache[seed] = explored
     
     return explored
 
