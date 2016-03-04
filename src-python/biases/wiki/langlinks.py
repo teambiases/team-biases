@@ -63,12 +63,21 @@ def mwclient_site(lang):
         
     return MWCLIENT_SITES[lang]
 
+ARTICLE_VERSIONS_CACHE = {}
+
 def get_article_versions(seed, langs):
     """Given a seed article and a set of languages, finds other versions of
     the article in the given languages by following interlanguage links.
     Articles are given and returned in the form (lang, article_title). Works by
     performing a graph search over the network of interlanguage links until
     no new article versions can been found."""
+    
+    # Check cache first
+    langs_key = tuple(sorted(langs))
+    if langs_key in ARTICLE_VERSIONS_CACHE:
+        lang_cache = ARTICLE_VERSIONS_CACHE[langs_key]
+        if seed in lang_cache:
+            return lang_cache[seed]
     
     explored = set()
     frontier = {seed}
@@ -81,5 +90,23 @@ def get_article_versions(seed, langs):
         for langlink in page.langlinks():
             if langlink[0] in langs and langlink not in explored:
                 frontier.add(langlink)
+                
+    # Put results in cache
+    if langs_key not in ARTICLE_VERSIONS_CACHE:
+        ARTICLE_VERSIONS_CACHE[langs_key] = {}
+    lang_cache = ARTICLE_VERSIONS_CACHE[langs_key]
+    for article in explored:
+        lang_cache[article] = explored
     
     return explored
+
+def get_unified_link_set(article, langs):
+    """Given an article as (lang, article_title), returns the links from that
+    page as a set of "unified" links, where a unified link is one that
+    incorporates the page being linked to in all given languages. Unified links
+    can be compared across language editions of Wikipedia."""
+    
+    lang, title = article
+    page = mwclient_site(lang).pages[title]
+    return {tuple(sorted(get_article_versions((lang, link), langs)))
+            for link in page.links(generator = False)}
