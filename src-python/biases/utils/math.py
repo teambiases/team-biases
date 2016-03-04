@@ -34,4 +34,4 @@ def spectrum_from_similarities(sim1, sim2, end1 = -1, end2 = 1):
     """Given positive similarity values relative to two ends of a spectrum,
     returns a placement along the spectrum."""
     
-    return (sim1 / (sim1 + sim2)) * (end2 - end1) + end1
+    return (sim2 / (sim1 + sim2)) * (end2 - end1) + end1
