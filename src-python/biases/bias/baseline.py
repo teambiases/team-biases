@@ -1,6 +1,5 @@
 from biases.wiki.langlinks import get_unified_link_set, mwclient_site
 from biases.utils.math import set_cosine_similarity, spectrum_from_similarities
-from sklearn.utils.metaestimators import if_delegate_has_method
 
 def link_baseline(target_article, spectrum_langs):
     """Given a Wikipedia article as a tuple of the form (lang, title) and
