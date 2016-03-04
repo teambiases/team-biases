@@ -66,7 +66,9 @@ def mwclient_site(lang):
 def get_article_versions(seed, langs):
     """Given a seed article and a set of languages, finds other versions of
     the article in the given languages by following interlanguage links.
-    Articles are given and returned in the form (lang, article_title)."""
+    Articles are given and returned in the form (lang, article_title). Works by
+    performing a graph search over the network of interlanguage links until
+    no new article versions can been found."""
     
     explored = set()
     frontier = {seed}
