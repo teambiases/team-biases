@@ -27,7 +27,4 @@ def create_corpus(seed_article, lang_code):
 	print(corpus)
 
 if __name__ == '__main__':
-	parser = argparse.ArgumentParser()
-	parser.add_argument()
-	parser.parse_args()
-	create_corpus()
+	create_corpus(sys.argv[1], sys.argv[2])
