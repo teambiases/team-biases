@@ -1,2 +1,2 @@
-def human_relevance(page)
+def human_relevance(page):
   return True
