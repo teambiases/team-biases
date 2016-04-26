@@ -63,14 +63,6 @@ def clean_link(link):
         link = re.sub("\'","\\\'",link)
         return link
     return ""
-
-def clean_text(text):
-    """
-    Returns text without anything between \{ \} or <>
-    """
-    text_replace1 = re.compile('(\{\{.*\}\})|(<.*>)')
-    return re.sub(text_replace1,"",text.decode("utf-8").lower())
-
 def gather_corpus(seed,depth):
     """
     This function will take a list of seed articles and return a list of article
@@ -83,20 +75,19 @@ def gather_corpus(seed,depth):
     c = connect()
     cursor = c.cursor()
     # We first get the text from the seed article
-    query_text = ("SELECT page_id, title, \
-        text FROM article WHERE title = \"%s\";")
-    
+    query_text = ("SELECT page_id, title, text FROM article WHERE title = \"%s\";")
+    text_replace1 = re.compile('(\{\{.*\}\})|(<.*>)')
+    link_match1 = re.compile('\[\[.*?(?!\[\[])\]\]')
     while (level != depth):
         lst = queue.pop()
         temp = set()
         level += 1
-        link_match1 = re.compile('\[\[.*?(?!\[\[])\]\]')
         for item,top in lst:
             print(top,"|||",item)
             cursor.execute(query_text % (item))
             for p_id, title, text in cursor:
-                text = clean_text(text)
-                if len(text.split()) > 0 and threshold(text.split()):
+                text = re.sub(text_replace1,"",text.decode("utf-8"))
+                if len(text.split()) > 0 and threshold(text.lower().split()):
                     pagelist.add((p_id,title.decode("utf-8")))
                     found = re.findall(link_match1,text)
                     if found:
