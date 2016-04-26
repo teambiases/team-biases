@@ -4,4 +4,6 @@
 
 # Compiled python files
 __pycache__
+**/*.pyc
 
+**/*.class

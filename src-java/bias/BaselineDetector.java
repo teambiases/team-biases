@@ -13,7 +13,7 @@ public class BaselineDetector {
 
 	private ArrayList<HashMap<String, Integer>> words = new ArrayList<HashMap<String, Integer>>();
 	private ArrayList<String> allWords = new ArrayList<String>();
-	private  final String fileFolder = "C:/Users/jmcaninl/Documents/Workspace/Biases/data/xml/";
+	private  final String fileFolder = "";
 	private String[] filenames = {"enwiki-", "eswiki-", "ruwiki-"};
 	private final int ENWIKI = 0, ESWIKI = 1, RUWIKI = 2;
 
