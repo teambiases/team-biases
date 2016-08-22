@@ -20,4 +20,32 @@ if __name__ == '__main__':
         freq_dict = Dictionary.load(dict_fname)
         corpus = WikiCorpus(dump_fname, dictionary = freq_dict)
         tfidf = TfidfModel(dictionary = freq_dict)
-        MmCorpus.serialize(mm_fname, tfidf[corpus], progress_cnt=10000)
+        
+        # Since metadata doesn't normally stay with a document when it's
+        # transformed into tf-idf values, we have to implement it ourselves
+        
+        corpus.metadata = True
+        metadata_queue = []
+        
+        class MetadataRemovedCorpus:
+            def __init__(self, corpus):
+                self.corpus = corpus
+            def __iter__(self):
+                for doc, metadata in self.corpus:
+                    metadata_queue.append(metadata)
+                    yield doc
+            
+        tfidf_corpus = tfidf[MetadataRemovedCorpus(corpus)]
+        
+        class MetadataAddedCorpus:
+            def __init__(self, corpus):
+                self.corpus = corpus
+                self.metadata = True
+            def __iter__(self):
+                for doc in self.corpus:
+                    yield doc, metadata_queue.pop()
+                
+        tfidf_metadata_corpus = MetadataAddedCorpus(tfidf_corpus)
+        
+        MmCorpus.serialize(mm_fname, tfidf_metadata_corpus, progress_cnt=10000,
+                           metadata=True)
