@@ -57,9 +57,9 @@ $(DATADIR)/wikipedia/dict/$(COMBINED_ID).parallel.dict.pickle : scripts/parallel
 	
 # Run LDA over dumps
 
-$(DATADIR)/lda/%.lda.pickle : \
+$(DATADIR)/lda/%.lda.pickle : scripts/train_lda.py \
 	$(DATADIR)/wikipedia/vector/%.tfidf.mm.bz2 \
 	$(DATADIR)/wikipedia/dict/%.dict.pickle
-	# TODO: actually run LDA
+	$(PYTHON) $^ $@
 
 topicmodel: $(DATADIR)/lda/$(COMBINED_ID).parallel.lda.pickle

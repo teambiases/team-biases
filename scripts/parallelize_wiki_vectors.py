@@ -1,9 +1,8 @@
 import _path_config
 
-import sys, csv, pickle, bz2, os, shutil
+import sys, csv, pickle, bz2, os, shutil, itertools, logging
 from collections import defaultdict
 from biases.wiki.titles import make_wiki_title
-import itertools
 
 if __name__ == '__main__':
     if len(sys.argv) < 4:
@@ -68,7 +67,7 @@ if __name__ == '__main__':
         id2id = new_id2id
         
         # Create index for parallelized corpus
-        print('Constructing new index...')
+        logging.info('Constructing new index')
         new2old = dict((new_id, old_id) for old_id, new_id in
                    id2compact_id.items() if new_id is not None)
         parallel_index = {}
@@ -77,7 +76,7 @@ if __name__ == '__main__':
                                  (i2t[old_id] for i2t in id2title))
             parallel_index[new_id] = tuple(article_titles)
         index_fname = out_fname[:-7] + '.index.pickle' # remove .mm.bz2
-        print('Saving to {}...'.format(index_fname))
+        logging.info('Saving index to %s', index_fname)
         with open(index_fname, 'wb') as index_file:
             pickle.dump(parallel_index, index_file)
         
@@ -106,12 +105,15 @@ if __name__ == '__main__':
                     self.lang_index = lang_index
                     self.fname = fname
                 def __iter__(self):
-                    print('Reading {}...'.format(self.fname))
+                    logging.info('Reading %s', self.fname)
                     for old_article_id, old_word_id, value in self.entries:
+                        # Subtract 1 from article id since MM is 1-indexed
+                        old_article_id -= 1
                         new_article_id = id2id[self.lang_index].get(old_article_id)
                         if new_article_id is not None:
                             new_word_id = old_word_id + self.word_id_offset
-                            yield new_article_id, new_word_id, value
+                            # Add 1 to article id since MM is 1-indexed
+                            yield (new_article_id + 1), new_word_id, value
                         
             entries = map(line2entry, mm_file)
             new_entries = map_entries(entries, word_id_offset, lang_index,
@@ -130,6 +132,7 @@ if __name__ == '__main__':
         header_lines = [header, ' '.join(map(str, [total_num_docs,
                 total_dict_size, total_nnz_entries]))]
         lines = itertools.chain(header_lines, lines)
+        logging.info('Writing matrix market data to %s', out_fname)
         with bz2.open(out_fname, 'w') as out_file:
             for line in lines:
                 out_file.write(bytes(line + '\n', encoding='utf-8'))
