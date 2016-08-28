@@ -12,6 +12,8 @@ SPECTRUMLANG2=ru
 DUMPDATE=20160820
 COMBINED_ID=$(TARGETLANG)-$(SPECTRUMLANG1)-$(SPECTRUMLANG2)-wiki-$(DUMPDATE)
 
+LDA_PASSES=5
+
 .PRECIOUS: $(DATADIR)/wikipedia/dict/%.dict.pickle
 .INTERMEDIATE: $(LIBDIR)/spark-%.tgz
 .PHONY: topicmodel
@@ -67,7 +69,7 @@ $(DATADIR)/wikipedia/dict/$(COMBINED_ID).parallel.dict.pickle : scripts/parallel
 $(DATADIR)/lda/%.lda.pickle : scripts/train_lda.py \
 	$(DATADIR)/wikipedia/vector/%.tfidf.mm.bz2 \
 	$(DATADIR)/wikipedia/dict/%.dict.pickle
-	$(PYTHON) $^ $@
+	$(PYTHON) $^ $@ $(LDA_PASSES)
 	
 # Output LDA topics to CSV
 	
