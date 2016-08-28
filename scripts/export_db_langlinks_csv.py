@@ -6,7 +6,7 @@ from biases.utils.mysql import connect_with_prompt
 
 if __name__ == '__main__':
     if len(sys.argv) < 4:
-        print('Usage: python3 export_langlinks_csv.py user@dbhost lang1 lang2... outdir')
+        print('Usage: python3 export_db_langlinks_csv.py user@dbhost lang1 lang2... outdir')
         print('Export langlinks info from a database as CSV files in outdir')
     else:
         user_hostname = sys.argv[1]

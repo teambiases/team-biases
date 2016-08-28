@@ -1,7 +1,8 @@
 import csv
-from biases.utils.mysql import cursor_iterator
+from biases.utils.mysql import cursor_iterator, read_sql_dump
 from itertools import groupby
 import mwclient
+import re
 
 LANGLINK_QUERY = """SELECT p.page_title, ll.ll_title, ll.ll_lang FROM
 ({from_lang}wiki.langlinks AS ll JOIN {from_lang}wiki.page AS p ON
@@ -38,6 +39,21 @@ def read_langlinks_from_db(from_lang, to_langs, db_cursor):
             result.append(to_titles.get(to_lang, None))
             
         yield tuple(result)
+                
+def read_langlinks_from_dump(dump_fname, to_langs):
+    """Read langlink data from a Wikipedia database dump file. to_langs is a
+    list of languages to find links to. Returns a dictionary from article IDs
+    in the dump's Wikipedia to lists of article titles in the to_langs."""
+    
+    langlinks = {}
+    for from_id, to_lang, to_title in read_sql_dump(dump_fname):
+        if to_lang in to_langs:
+            if from_id not in langlinks:
+                langlinks[from_id] = [None] * len(to_langs)
+            to_lang_index = to_langs.index(to_lang)
+            langlinks[from_id][to_lang_index] = to_title
+            
+    return langlinks
 
 def write_langlinks_file(langs, langlinks, filename):
     """Given a list of langs (as two-letter codes) [lang1, lang2...] and an

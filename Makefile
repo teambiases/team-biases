@@ -37,6 +37,13 @@ $(DATADIR)/wikipedia/vector/%.tfidf.mm.bz2 : scripts/build_wiki_vectors.py $(DAT
 	$(PYTHON) $^ $(patsubst %.bz2,%,$@)
 	bzip2 -f $(patsubst %.bz2,%,$@)
 	
+# Extract langlinks
+$(DATADIR)/wikipedia/langlinks/$(TARGETLANG)-$(SPECTRUMLANG1)-$(SPECTRUMLANG2)-$(DUMPDATE).langlinks.csv : \
+	scripts/export_dump_langlinks_csv.py \
+	$(DATADIR)/wikipedia/dump/$(TARGETLANG)wiki-$(DUMPDATE)-langlinks.sql.gz \
+	$(DATADIR)/wikipedia/vector/$(TARGETLANG)wiki-$(DUMPDATE).tfidf.mm.bz2
+	$(PYTHON) $^ $@ $(TARGETLANG) $(SPECTRUMLANG1) $(SPECTRUMLANG2)
+	
 # Combine matrix market files and sort
 
 $(DATADIR)/wikipedia/vector/$(COMBINED_ID).parallel.tfidf.mm.bz2 : scripts/parallelize_wiki_vectors.py \
