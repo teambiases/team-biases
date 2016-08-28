@@ -61,5 +61,11 @@ $(DATADIR)/lda/%.lda.pickle : scripts/train_lda.py \
 	$(DATADIR)/wikipedia/vector/%.tfidf.mm.bz2 \
 	$(DATADIR)/wikipedia/dict/%.dict.pickle
 	$(PYTHON) $^ $@
+	
+# Output LDA topics to CSV
+	
+$(DATADIR)/lda/%.lda.topics.csv : scripts/lda_to_csv.py $(DATADIR)/lda/%.lda.pickle
+	$(PYTHON) $^ $@
 
-topicmodel: $(DATADIR)/lda/$(COMBINED_ID).parallel.lda.pickle
+topicmodel: $(DATADIR)/lda/$(COMBINED_ID).parallel.lda.pickle \
+	$(DATADIR)/lda/$(COMBINED_ID).parallel.lda.topics.csv
