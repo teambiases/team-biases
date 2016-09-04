@@ -1,8 +1,7 @@
 import csv
 from biases.utils.mysql import cursor_iterator, read_sql_dump
 from itertools import groupby
-import mwclient
-import re
+from biases.wiki import mwclient_site
 
 LANGLINK_QUERY = """SELECT p.page_title, ll.ll_title, ll.ll_lang FROM
 ({from_lang}wiki.langlinks AS ll JOIN {from_lang}wiki.page AS p ON
@@ -66,18 +65,6 @@ def write_langlinks_file(langs, langlinks, filename):
         writer.writerow(langs)
         for langlink in langlinks:
             writer.writerow(langlink)
-
-MWCLIENT_SITES = {}
-
-def mwclient_site(lang):
-    """Given a language code, get the mwclient Site object for that language
-    edition of Wikipedia. Caches Site objects to avoid making them over and
-    over."""
-    
-    if lang not in MWCLIENT_SITES:
-        MWCLIENT_SITES[lang] = mwclient.Site('{}.wikipedia.org'.format(lang))
-        
-    return MWCLIENT_SITES[lang]
 
 ARTICLE_VERSIONS_CACHE = {}
 
