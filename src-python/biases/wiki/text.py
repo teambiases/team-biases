@@ -3,7 +3,7 @@
 import re
 from biases.wiki.titles import make_wiki_title
 
-MEDIAWIKI_LINK_RE = re.compile(r'\[\[([^\|#]+)(?:#[^\|]*)?(\|[^\]]+)?\]\]')
+MEDIAWIKI_LINK_RE = re.compile(r'\[\[([^\|\]#]+)(?:#[^\|]*)?(?:\|([^\]]+))?\]\]')
 
 def extract_links(text):
     """Given a selection of MediaWiki text, returns a generator over the links
