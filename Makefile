@@ -11,6 +11,8 @@ SPECTRUMLANG1=en
 SPECTRUMLANG2=ru
 DUMPDATE=20160820
 COMBINED_ID=$(TARGETLANG)-$(SPECTRUMLANG1)-$(SPECTRUMLANG2)-wiki-$(DUMPDATE)
+CORPUS_SEARCH="Guerra Fría"
+CORPUS_NAME=coldwar
 
 LDA_PASSES=5
 
@@ -78,3 +80,19 @@ $(DATADIR)/lda/%.lda.topics.csv : scripts/lda_to_csv.py $(DATADIR)/lda/%.lda.pic
 
 topicmodel: $(DATADIR)/lda/$(COMBINED_ID).parallel.lda.pickle \
 	$(DATADIR)/lda/$(COMBINED_ID).parallel.lda.topics.csv
+	
+# Create corpus through text search
+
+$(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).titles.txt : scripts/search_dump.py \
+	$(DATADIR)/wikipedia/dump/$(TARGETLANG)wiki-$(DUMPDATE)-pages-articles.xml.bz2
+	$(PYTHON) $^ $@ $(CORPUS_SEARCH)
+	
+# Create corpus with topics
+
+$(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).topics.pickle : scripts/build_topics_corpus.py \
+	$(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).titles.txt \
+	$(DATADIR)/wikipedia/vector/$(COMBINED_ID).parallel.tfidf.mm.bz2 \
+	$(DATADIR)/lda/$(COMBINED_ID).parallel.lda.pickle
+	$(PYTHON) $^ $@
+	
+topicscorpus: $(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).topics.pickle
