@@ -2,4 +2,5 @@
 mwclient>=0.8.1
 gensim>=0.13.1
 py4j>=0.10.3
+numpy>=1.11.1
 

@@ -35,3 +35,12 @@ def spectrum_from_similarities(sim1, sim2, end1 = -1, end2 = 1):
     returns a placement along the spectrum."""
     
     return (sim2 / (sim1 + sim2)) * (end2 - end1) + end1
+
+def sparse2dense(sparse, length):
+    """Given a sparse vector as a list of (index, value) pairs and a vector
+    length, returns a dense vector as a list of values."""
+    
+    dense = [0] * length
+    for index, value in sparse:
+        dense[index] = value
+    return dense
