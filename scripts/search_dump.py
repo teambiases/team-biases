@@ -3,6 +3,7 @@ import _path_config
 import sys, bz2, logging
 
 from gensim.corpora import wikicorpus
+from biases.wiki.titles import make_wiki_title
 
 if __name__ == '__main__':
     if len(sys.argv) < 4:
@@ -23,7 +24,7 @@ if __name__ == '__main__':
                         wikicorpus.extract_pages(wiki_dump_file):
                     if any(search_query in content.lower() for search_query
                            in search_queries):
-                        titles_out_file.write(title + '\n')
+                        titles_out_file.write(make_wiki_title(title) + '\n')
                         num_hits += 1
                         
         logging.info('Found %d matches', num_hits)
