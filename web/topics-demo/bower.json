@@ -1,0 +1,22 @@
+{
+  "name": "team-biases-topics-demo",
+  "homepage": "http://zetaware.net/teambiases",
+  "authors": [
+    "cassidylaidlaw <cassidy256@gmail.com>"
+  ],
+  "description": "Topic-based bias-model demo",
+  "main": "index.html",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "select2": "^4.0.3",
+    "chart.js": "npm:chart.js#latest"
+  }
+}

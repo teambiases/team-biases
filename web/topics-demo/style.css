@@ -1,0 +1,9 @@
+
+.form-inline .form-group { margin-right: 30px; }
+#kval { width: 60px; }
+#article-title { width: 300px; }
+
+.topics-chart-wrapper { height: 100px; margin: 0 -100px; }
+.article p { margin-bottom: 0; }
+.article { border: 1px solid #ddd; border-radius: 4px; padding: 10px;
+	display: inline-block; margin: 0 10px 10px 0; }
