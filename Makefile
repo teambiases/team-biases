@@ -12,13 +12,15 @@ SPECTRUMLANG2=ru
 DUMPDATE=20160820
 COMBINED_ID=$(TARGETLANG)-$(SPECTRUMLANG1)-$(SPECTRUMLANG2)-wiki-$(DUMPDATE)
 CORPUS_SEARCH="Guerra Fría"
+CORPUS_SEED="Guerra Fría"
 CORPUS_NAME=coldwar
 
+LDA_TOPICS=2000
 LDA_PASSES=5
 
 .PRECIOUS: $(DATADIR)/wikipedia/dict/%.dict.pickle
 .INTERMEDIATE: $(LIBDIR)/spark-%.tgz
-.PHONY: topicmodel
+.PHONY: topicmodel topicscorpus
 
 $(LIBDIR) :
 	mkdir $@
@@ -66,20 +68,25 @@ $(DATADIR)/wikipedia/dict/$(COMBINED_ID).parallel.dict.pickle : scripts/parallel
 	$(DATADIR)/wikipedia/dict/$(SPECTRUMLANG2)wiki-$(DUMPDATE).dict.pickle
 	$(PYTHON) $^ $@
 	
-# Run LDA over dumps
+# Run LDA over dumps (first rule for when topic number is unspecified)
 
 $(DATADIR)/lda/%.lda.pickle : scripts/train_lda.py \
 	$(DATADIR)/wikipedia/vector/%.tfidf.mm.bz2 \
 	$(DATADIR)/wikipedia/dict/%.dict.pickle
-	$(PYTHON) $^ $@ $(LDA_PASSES)
+	$(PYTHON) $^ $@
+
+$(DATADIR)/lda/%.$(LDA_TOPICS)t.lda.pickle : scripts/train_lda.py \
+	$(DATADIR)/wikipedia/vector/%.tfidf.mm.bz2 \
+	$(DATADIR)/wikipedia/dict/%.dict.pickle
+	$(PYTHON) $^ $@ $(LDA_TOPICS) $(LDA_PASSES)
 	
 # Output LDA topics to CSV
 	
 $(DATADIR)/lda/%.lda.topics.csv : scripts/lda_to_csv.py $(DATADIR)/lda/%.lda.pickle
 	$(PYTHON) $^ $@
 
-topicmodel: $(DATADIR)/lda/$(COMBINED_ID).parallel.lda.pickle \
-	$(DATADIR)/lda/$(COMBINED_ID).parallel.lda.topics.csv
+topicmodel: $(DATADIR)/lda/$(COMBINED_ID).parallel.$(LDA_TOPICS)t.lda.pickle \
+	$(DATADIR)/lda/$(COMBINED_ID).parallel.$(LDA_TOPICS)t.lda.topics.csv
 	
 # Create corpus through text search
 
@@ -87,12 +94,18 @@ $(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).titles.txt : scripts/s
 	$(DATADIR)/wikipedia/dump/$(TARGETLANG)wiki-$(DUMPDATE)-pages-articles.xml.bz2
 	$(PYTHON) $^ $@ $(CORPUS_SEARCH)
 	
+# Sort corpus with TF-IDF values
+
+$(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).%.tfidfsorted.titles.csv : scripts/tfidf_cosine_sort.py \
+	$(DATADIR)/wikipedia/vector/%.tfidf.mm.bz2
+	$(PYTHON) $^ $@ $(CORPUS_SEED)
+	
 # Create corpus with topics
 
-$(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).topics.pickle : scripts/build_topics_corpus.py \
+$(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).$(LDA_TOPICS)topics.pickle : scripts/build_topics_corpus.py \
 	$(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).titles.txt \
 	$(DATADIR)/wikipedia/vector/$(COMBINED_ID).parallel.tfidf.mm.bz2 \
-	$(DATADIR)/lda/$(COMBINED_ID).parallel.lda.pickle
+	$(DATADIR)/lda/$(COMBINED_ID).parallel.$(LDA_TOPICS)t.lda.pickle
 	$(PYTHON) $^ $@
 	
-topicscorpus: $(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).topics.pickle
+topicscorpus: $(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).$(LDA_TOPICS)topics.pickle
