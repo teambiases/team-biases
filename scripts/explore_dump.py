@@ -6,17 +6,18 @@ import logging
 import re
 import argparse
 import gensim
+import csv
 
 from biases.wiki.titles import make_wiki_title
-from biases.corpus.search_queries import ALL_SEARCH_QUERIES, search_query_help
+from biases.corpus.search_queries import ALL_SEARCH_QUERIES, query_func_help
 from biases.utils.gensim import load_mm_corpus
 from gensim.corpora import wikicorpus
 
 if __name__ == '__main__':
     
     parser = argparse.ArgumentParser(description =
-            'Search a Wikipedia dump for articles that match given criteria.',
-            epilog = search_query_help(),
+            'Explore properties of articles in a Wikipedia dump.',
+            epilog = query_func_help(),
             formatter_class = argparse.RawDescriptionHelpFormatter)
     parser.add_argument('wiki_dump_fname', type=str, metavar='wiki-dump',
                         help='Wikipedia dump to search')
@@ -24,10 +25,11 @@ if __name__ == '__main__':
                         help='matrix market file of tfidf vectors for dump')
     parser.add_argument('dict_fname', type=str, metavar='dict',
                         help='dictionary file')
-    parser.add_argument('titles_out_fname', type=str, metavar='titles',
-                        help='output file with one article title per line')
-    parser.add_argument('search_query', type=str, metavar='search-query',
-                        help='search query (described more below)')
+    parser.add_argument('results_fname', type=str, metavar='results',
+                        help='CSV output file')
+    parser.add_argument('query_funcs', type=str, nargs='+',
+                        metavar='query-function',
+                        help='a query function (described more below)')
     
     args = parser.parse_args()
     
@@ -38,19 +40,20 @@ if __name__ == '__main__':
     prepared_query_funcs = {}
     for name, search_query in ALL_SEARCH_QUERIES.items():
         prepared_query_funcs[name] = search_query(corpus, dict)
-    search_query_func = eval(args.search_query, prepared_query_funcs)
-    
-    num_hits = 0
+        
+    query_funcs = [eval(query_func, prepared_query_funcs)
+                   for query_func in args.query_funcs]
 
-    logging.info('Searching %s with query %s',
-                 args.wiki_dump_fname, args.search_query)
+    logging.info('Exploring %s with functions %s',
+                 args.wiki_dump_fname,
+                 ', '.join(map(str, args.query_funcs)))
     with bz2.open(args.wiki_dump_fname, 'rt') as wiki_dump_file:
-        with open(args.titles_out_fname, 'w') as titles_out_file:
+        with open(args.results_fname, 'w') as results_file:
+            results = csv.writer(results_file)
+            # Write header row
+            results.writerow(['Title'] + args.query_funcs)
             for title, content, pageid in \
                     wikicorpus.extract_pages(wiki_dump_file):
-                if search_query_func(content):     
-                    titles_out_file.write(make_wiki_title(title) + '\n')
-                    num_hits += 1
-                    
-    logging.info('Found %d matches', num_hits)
+                results.writerow([title] + [query_func(content) for query_func
+                                            in query_funcs])
     

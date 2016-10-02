@@ -11,10 +11,8 @@ SPECTRUMLANG1=en
 SPECTRUMLANG2=ru
 DUMPDATE=20160820
 COMBINED_ID=$(TARGETLANG)-$(SPECTRUMLANG1)-$(SPECTRUMLANG2)-wiki-$(DUMPDATE)
-CORPUS_SEED="Guerra Fría"
-CORPUS_SEARCH="keywords.txt"
+CORPUS_QUERY="(text_occurences('Guerra Fría') >= 3) | (category_occurences('Categoría:', 'Guerra Fría'))"
 CORPUS_NAME=coldwar
-THRESHOLD = ".1"
 
 LDA_TOPICS=2000
 LDA_PASSES=5
@@ -92,8 +90,10 @@ topicmodel: $(DATADIR)/lda/$(COMBINED_ID).parallel.$(LDA_TOPICS)t.lda.pickle \
 # Create corpus through text search
 
 $(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).titles.txt : scripts/search_dump.py \
-	$(DATADIR)/wikipedia/dump/$(TARGETLANG)wiki-$(DUMPDATE)-pages-articles.xml.bz2
-	$(PYTHON) $^ $@ $(CORPUS_SEARCH) $(THRESHOLD)
+	$(DATADIR)/wikipedia/dump/$(TARGETLANG)wiki-$(DUMPDATE)-pages-articles.xml.bz2 \
+	$(DATADIR)/wikipedia/vector/$(TARGETLANG)wiki-$(DUMPDATE).tfidf.mm.bz2 \
+	$(DATADIR)/wikipedia/dict/$(TARGETLANG)wiki-$(DUMPDATE).dict.pickle
+	$(PYTHON) $^ $@ $(CORPUS_QUERY)
 	
 # Sort corpus with TF-IDF values
 
