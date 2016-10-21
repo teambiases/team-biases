@@ -101,9 +101,9 @@ def make_search_query(help):
     """
     
     def query_decorator(query_func):
-        def query_wrap(corpus, dict):
+        def query_wrap(corpus, dict, categories):
             def query(*args, **kwargs):
-                return query_func(corpus, dict, *args, **kwargs)
+                return query_func(corpus, dict, categories, *args, **kwargs)
             return query
         
         ALL_SEARCH_QUERIES[query_func.__name__] = query_wrap
@@ -124,7 +124,7 @@ def load_keywords_from_file(keywords_fname):
     return keywords
     
 @make_search_query('keyword_portion(\'keywords.txt\'): portion of keywords that are present in article')
-def keyword_portion(corpus, dict, keywords_fname):
+def keyword_portion(corpus, dict, categories, keywords_fname):
     keywords = load_keywords_from_file(keywords_fname)
     def keyword_portion_query(content):
         word_set = {word.decode('utf-8') for word in
@@ -134,7 +134,7 @@ def keyword_portion(corpus, dict, keywords_fname):
     return SearchQuery(keyword_portion_query)
     
 @make_search_query('word_portion(\'keywords.txt\'): portion of words in article that are keywords')
-def word_portion(corpus, dict, keywords_fname):
+def word_portion(corpus, dict, categories, keywords_fname):
     keywords = load_keywords_from_file(keywords_fname)
     def word_portion_query(content):
         words = [word.decode('utf-8') for word in
@@ -144,14 +144,14 @@ def word_portion(corpus, dict, keywords_fname):
     return SearchQuery(word_portion_query)
 
 @make_search_query('text_occurences(\'phrase\'): number of times \'phrase\' (case-insensitive) appears in the text') 
-def text_occurences(corpus, dict, phrase):
+def text_occurences(corpus, dict, categories, phrase):
     phrase = phrase.lower()
     def text_occurences_query(content):
         return content.lower().count(phrase)
     return SearchQuery(text_occurences_query)
     
 @make_search_query('category_occurences(\'Category-prefix:\', \'phrase\'): number of times \'phrase\' appears in categories of this article')
-def category_occurences(corpus, dict, category_prefix, phrase):
+def category_occurences(corpus, dict, categories, category_prefix, phrase):
     phrase = phrase.lower()
     def category_occurences_query(content):
         links = extract_links(content)
@@ -163,8 +163,29 @@ def category_occurences(corpus, dict, category_prefix, phrase):
         return occurences
     return SearchQuery(category_occurences_query)
 
+@make_search_query('category_occurences(\'Category:name\'): number of subcategories of the given category that this article appears in')
+def subcategories_of(corpus, dict, categories, category):
+    logging.info('determining subcategories of \"%s\"', category)
+    # Use tree search to get all subcategories for given category
+    subcategory_frontier = {category}
+    subcategories = set()
+    while len(subcategory_frontier) > 0:
+        subcategory = next(iter(subcategory_frontier))
+        subcategory_frontier.remove(subcategory)
+        subcategories.add(subcategory)
+        subcategory_frontier |= (set(categories[subcategory]) - subcategories)
+    
+    def subcategories_of_query(content):
+        num_subcategories = 0
+        for link_article, link_text in extract_links(content):
+            if link_article in subcategories:
+                num_subcategories += 1
+        return num_subcategories
+    
+    return SearchQuery(subcategories_of_query)
+
 @make_search_query('tfidf_similarity(\'Article title\'): tfidf cosine similarity to the given article')
-def tfidf_similarity(corpus, dictionary, seed_article_title):
+def tfidf_similarity(corpus, dictionary, categories, seed_article_title):
     mm, metadata, index = corpus
     
     # Create tfidf model
