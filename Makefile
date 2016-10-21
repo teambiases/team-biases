@@ -11,7 +11,7 @@ SPECTRUMLANG1=en
 SPECTRUMLANG2=ru
 DUMPDATE=20160820
 COMBINED_ID=$(TARGETLANG)-$(SPECTRUMLANG1)-$(SPECTRUMLANG2)-wiki-$(DUMPDATE)
-CORPUS_QUERY="(text_occurences('Guerra Fría') >= 3) | (category_occurences('Categoría:', 'Guerra Fría'))"
+CORPUS_QUERY="subcategories_of('Categoría:Guerra_Fría') > 0"
 CORPUS_NAME=coldwar
 
 LDA_TOPICS=2000

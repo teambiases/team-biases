@@ -10,6 +10,7 @@ from biases.utils.math import safe_ratio, cosine_similarity
 from biases.wiki.text import extract_links
 from gensim.corpora import wikicorpus
 from gensim.models import TfidfModel
+from biases.wiki.titles import make_wiki_title
 
 ALL_SEARCH_QUERIES = {}
 
@@ -174,10 +175,12 @@ def subcategories_of(corpus, dict, categories, category):
         subcategory_frontier.remove(subcategory)
         subcategories.add(subcategory)
         subcategory_frontier |= (set(categories[subcategory]) - subcategories)
+    logging.info('found %d subcategories', len(subcategories))
     
     def subcategories_of_query(content):
         num_subcategories = 0
         for link_article, link_text in extract_links(content):
+            link_article = make_wiki_title(link_article)
             if link_article in subcategories:
                 num_subcategories += 1
         return num_subcategories

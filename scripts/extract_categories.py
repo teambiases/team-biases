@@ -8,6 +8,7 @@ import logging
 from collections import defaultdict
 from gensim.corpora.wikicorpus import extract_pages
 from biases.wiki.text import extract_links
+from biases.wiki.titles import make_wiki_title
 
 if __name__ == '__main__':
     if len(sys.argv) != 3:
@@ -27,6 +28,7 @@ if __name__ == '__main__':
         categories = defaultdict(list)
         
         for title, content, pageid in category_pages:
+            title = make_wiki_title(title)
             category_prefix = title[:title.index(':') + 1]
             # Make entry for this category with no subcategories if it
             # doesn't exist
@@ -35,6 +37,7 @@ if __name__ == '__main__':
             
             # Look for supercategories of this category
             for link_article, link_text in extract_links(content):
+                link_article = make_wiki_title(link_article)
                 if link_article.startswith(category_prefix):
                     categories[link_article].append(title)
                     
