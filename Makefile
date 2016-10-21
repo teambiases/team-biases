@@ -36,6 +36,11 @@ $(LIBDIR)/spark-% : | $(LIBDIR)/spark-%.tgz
 
 $(DATADIR)/wikipedia/dict/%.dict.pickle : scripts/build_wiki_dict.py $(DATADIR)/wikipedia/dump/%-pages-articles.xml.bz2
 	$(PYTHON) $^ $@
+	
+# Build category trees from dumps
+$(DATADIR)/wikipedia/categories/%.categories.pickle : scripts/extract_categories.py $(DATADIR)/wikipedia/dump/%-pages-articles.xml.bz2
+	mkdir -p $(dir $@)
+	$(PYTHON) $^ $@
 
 # Creating tf-idf matrix market files from corpora and dictionaries
 $(DATADIR)/wikipedia/vector/%.tfidf.mm.bz2 : scripts/build_wiki_vectors.py $(DATADIR)/wikipedia/dump/%-pages-articles.xml.bz2 $(DATADIR)/wikipedia/dict/%.dict.pickle
@@ -94,12 +99,6 @@ $(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).titles.txt : scripts/s
 	$(DATADIR)/wikipedia/vector/$(TARGETLANG)wiki-$(DUMPDATE).tfidf.mm.bz2 \
 	$(DATADIR)/wikipedia/dict/$(TARGETLANG)wiki-$(DUMPDATE).dict.pickle
 	$(PYTHON) $^ $@ $(CORPUS_QUERY)
-	
-# Sort corpus with TF-IDF values
-
-$(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).%.tfidfsorted.titles.csv : scripts/tfidf_cosine_sort.py \
-	$(DATADIR)/wikipedia/vector/%.tfidf.mm.bz2
-	$(PYTHON) $^ $@ $(CORPUS_SEED)
 	
 # Create corpus with topics
 
