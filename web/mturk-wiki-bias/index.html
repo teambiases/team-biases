@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  <title>Read and annotate a paragraph from a Wikipedia article</title>
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <!-- jQuery UI -->
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+  <!-- contextMenu -->
+  <link rel="stylesheet" href="https://cdn.rawgit.com/swisnl/jQuery-contextMenu/master/dist/jquery.contextMenu.min.css">
+  
+  <style type="text/css">
+.bias-question { width: 800px; position: relative; margin: 20px 0 30px 0; }
+.bias-question .slider-labels span { position: absolute; }
+.bias-question .slider-labels:before { content: "\00a0"; }
+.bias-question .slider { left: 7%; right: 7%; width: 85% }
+.bias-question .slider-labels span { font-size: 12px; text-align: center; }
+.label-1 { left: 0%; right: 85%; text-align: left; }
+.label-2 { left: 14%; right: 71%; text-align: left; }
+.label-3 { left: 28%; right: 57%; text-align: center; }
+.label-4 { left: 42%; right: 42%; text-align: center; }
+.label-5 { left: 57%; right: 28%; text-align: center; }
+.label-6 { left: 71%; right: 14%; text-align: right; }
+.label-7 { left: 85%; right: 0%; text-align: right; }
+
+#document {-webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;
+    -o-user-select: none; user-select: none; }
+.sentence { cursor: pointer; }
+.sentence:hover { text-decoration: underline; }
+.united-states, .soviet { border-radius: 2px; padding: 2px; }
+.united-states { background-color: #d9edf7; }
+.soviet { background-color: #f2dede; }
+  </style>
+  
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+</head>
+<body style="padding: 15px 0;">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div id="instructions" class="panel panel-primary">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              Instructions <small> <a role="button"
+                data-toggle="collapse" href="#instructions-body"> show/hide</a>
+              </small>
+            </h4>
+          </div>
+          <div id="instructions-body" class="collapse">
+            <div class="panel-body">
+              <p>Hello! Thank you for taking the time to be a part of this
+                survey. Today, the following survey is looking to detect and
+                understand bias at a phrase/sentence level in Spanish texts. For
+                the purposes of this survey, bias is defined as imbalances in
+                presentation that would suggest a preference or prejudice. In
+                order to access the survey, we ask that you read the below
+                sentences, and be able to highlight, note, and select whether or
+                not a specific phrase/sentence is biased, and the direction in
+                which something may or may not be biased.</p>
+              <ul>
+                <li>If something is biased, please tag/highlight that
+                  phrase and then select the &ldquo;Polar Phrase&rdquo; tag.</li>
+                <ul>
+                  <li>After selecting the &ldquo;Polar Phrase&rdquo; tag
+                    you will be prompted to select which direction that bias
+                    exists.</li>
+                </ul>
+                <li>In the event you believe/feel something is biased, but
+                  cannot pinpoint the origin/direction of said bias, please
+                  highlight the entire sentence and select the &ldquo;Point of
+                  View&rdquo; tag.</li>
+                <li>If the author makes a statement that they claim is
+                  supported by an unspecified source (i.e. &ldquo;some
+                  people&rdquo;) and it does not have a cited source attached to
+                  the sentence in the form of a footnote, please highlight that
+                  sentence and select the &ldquo;Weasel&rdquo; tag.</li>
+                <li>[INSERT INSTRUCTIONS ON OTHER TAGS].</li>
+              </ul>
+              <p>Upon successful completion of the below qualifications
+                test, you will be approved to complete the task.</p>
+            </div>
+          </div>
+        </div>
+
+        <div id="annotation" class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              Text to annotate <small>(click on a sentence to annotate
+                it)</small>
+            </h4>
+          </div>
+          <div class="panel-body" unselectable="on">
+            <div id="document">
+              <p>
+                <span class="sentence">The Soviet Union initially denied
+                  knowledge of the incident, <sup id="cite_ref-4"
+                  class="reference"><a href="#cite_note-4">[2]</a></sup> but
+                  later admitted shooting down the aircraft, claiming that it
+                  was on a <a
+                  href="https://en.wikipedia.org/wiki/Measurement_and_signature_intelligence"
+                  title="Measurement and signature intelligence">MASINT</a> spy
+                  mission.<sup id="cite_ref-Sputnik_5-0" class="reference"><a
+                    href="#cite_note-Sputnik-5">[3]</a></sup>
+                </span> <span class="sentence">The <a
+                  href="https://en.wikipedia.org/wiki/Politburo_of_the_Communist_Party_of_the_Soviet_Union"
+                  title="Politburo of the Communist Party of the Soviet Union">Politburo
+                    of the Communist Party of the Soviet Union</a> said it was a
+                  deliberate provocation by the United States<sup
+                  id="cite_ref-6" class="reference"><a href="#cite_note-6">[4]</a></sup>
+                  to test the Soviet Union's military preparedness, or even <a
+                  href="https://en.wikipedia.org/wiki/Casus_belli"
+                  title="Casus belli">to provoke a war</a>.
+                </span> <span class="sentence"> The <a
+                  href="https://en.wikipedia.org/wiki/White_House"
+                  title="White House">White House</a> accused the Soviet Union
+                  of obstructing search and rescue operations.<sup
+                  id="cite_ref-Congressional_Record_1983_7-0" class="reference"><a
+                    href="#cite_note-Congressional_Record_1983-7">[5]</a></sup></span> <span
+                  class="sentence"> The <a
+                  href="https://en.wikipedia.org/wiki/Soviet_Armed_Forces"
+                  title="Soviet Armed Forces">Soviet Armed Forces</a> suppressed
+                  evidence sought by the <a
+                  href="https://en.wikipedia.org/wiki/International_Civil_Aviation_Organization"
+                  title="International Civil Aviation Organization">International
+                    Civil Aviation Organization</a> (ICAO) investigation, such as
+                  the <a
+                  href="https://en.wikipedia.org/wiki/Flight_recorder#Flight_data_recorder"
+                  title="Flight recorder">flight data recorders</a>,<sup
+                  id="cite_ref-8" class="reference"><a href="#cite_note-8">[6]</a></sup>
+                  which were released eight years later after the <a
+                  href="https://en.wikipedia.org/wiki/Dissolution_of_the_Soviet_Union"
+                  title="Dissolution of the Soviet Union">dissolution of the
+                    Soviet Union</a>.<sup id="cite_ref-tapes_9-0" class="reference"><a
+                    href="#cite_note-tapes-9">[7]</a></sup></span>
+              </p>
+              <p>
+                <span class="sentence">The incident was one of the most
+                  tense moments of the <a
+                  href="https://en.wikipedia.org/wiki/Cold_War" title="Cold War">Cold
+                    War</a> and resulted in an escalation of <a
+                  href="https://en.wikipedia.org/wiki/Anti-communism"
+                  title="Anti-communism">anti-Soviet</a> sentiment, particularly
+                  in the United States.
+                </span> <span class="sentence">The opposing points of view on
+                  the incident were never fully resolved; consequently, several
+                  groups continue to dispute official reports and offer
+                  alternative theories of the event.</span> <span class="sentence">The
+                  subsequent release of <a
+                  href="https://en.wikisource.org/wiki/Korean_Air_Lines_Flight_007_transcripts"
+                  class="extiw"
+                  title="wikisource:Korean Air Lines Flight 007 transcripts">Korean
+                    Air Lines Flight 007 transcripts</a> and flight recorders by the
+                  <a href="https://en.wikipedia.org/wiki/Russia" title="Russia">Russian
+                    Federation</a> has clarified some details.
+                </span>
+              </p>
+            </div>
+          </div>
+          <ul class="list-group">
+            <li class="list-group-item">Key: 
+              <span class="united-states">Biased towards the United States</span>
+              <span class="soviet">Biased towards the Soviet Union</span>
+            </li>
+          </ul>
+        </div>
+
+        <h4>Questions</h4>
+        <ol id="questions">
+          <li id="us-bias-question" class="bias-question">
+            <p>How biased was the text towards or against the United States?</p>
+            <p class="slider"></p>
+            <p class="slider-labels">
+              <span class="label-1">Entirely biased against</span>
+              <span class="label-2">Mostly biased against</span>
+              <span class="label-3">Slightly biased against</span>
+              <span class="label-4">Not biased</span>
+              <span class="label-5">Slightly biased towards</span>
+              <span class="label-6">Mostly biased towards</span>
+              <span class="label-7">Entirely biased towards</span>
+            </p>
+          </li>
+          <li id="soviet-bias-question" class="bias-question">
+            <p>How biased was the text towards or against the Soviet Union?</p>
+            <p class="slider"></p>
+            <p class="slider-labels">
+              <span class="label-1">Entirely biased against</span>
+              <span class="label-2">Mostly biased against</span>
+              <span class="label-3">Slightly biased against</span>
+              <span class="label-4">Not biased</span>
+              <span class="label-5">Slightly biased towards</span>
+              <span class="label-6">Mostly biased towards</span>
+              <span class="label-7">Entirely biased towards</span>
+            </p>
+          </li>
+        </ol>
+      </div>
+    </div>
+    
+    <form>
+      <input type="hidden" name="sentences" id="sentences-input" />
+      <input type="hidden" name="us_bias" id="us-bias-input" />
+      <input type="hidden" name="soviet_bias" id="soviet-bias-input" />
+    </form>
+  </div>
+
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+  <!-- Bootstrap JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <script src="https://cdn.rawgit.com/swisnl/jQuery-contextMenu/master/dist/jquery.contextMenu.min.js" type="text/javascript"></script>
+
+  <script type="text/javascript">
+  
+$(function() {
+  $('.bias-question .slider').slider({
+    min: -3, max: 3, step: 1,
+    change: function(event, ui) {
+        // Get 'us' or 'soviet' depending on which slider this is
+        var country = $(this).parent().attr('id').split('-')[0];
+        // Change cooresponding hidden field on form
+        $('#' + country + '-bias-input').val(ui.value);
+    }
+  }).slider('value', 0);
+  
+  var sentenceAnnotations = [];
+  var annotationClasses = ['sentence', 'united-states', 'soviet'];
+  var i = 0;
+  $('.sentence').each(function() {
+      sentenceAnnotations.push(0);
+      $(this).attr('data-sentence-index', i);
+      i++;
+  });
+  $('#sentences-input').val(sentenceAnnotations.join(''));
+  
+  $.contextMenu({
+    selector: '.sentence',
+    trigger: 'left',
+    callback: function(key, options) {
+      $sentence = $(this).parents().addBack().filter('.sentence');
+      $sentence.removeClass().addClass('sentence').addClass(key);
+      
+      var sentenceIndex = parseInt($sentence.attr('data-sentence-index'));
+      for(var classIndex = 0; classIndex < annotationClasses.length; classIndex++) {
+          if($sentence.hasClass(annotationClasses[classIndex])) {
+              sentenceAnnotations[sentenceIndex] = classIndex;
+          }
+      }
+      
+      // Update hidden form element for sentences
+      $('#sentences-input').val(sentenceAnnotations.join(''));
+    },
+    items: {
+      'united-states': {name: 'Biased towards the United States'},
+      'soviet': {name: 'Biased towards the Soviet Union'},
+      'sep1': "---------",
+      'sentence': {name: 'Clear annotation'}
+    }
+  });
+  $('.sentence a').on('click', function(e) {
+    e.preventDefault();
+  });
+});
+  </script>
+</body>
+</html>

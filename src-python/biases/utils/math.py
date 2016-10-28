@@ -44,3 +44,10 @@ def sparse2dense(sparse, length):
     for index, value in sparse:
         dense[index] = value
     return dense
+
+def safe_ratio(numerator, denominator):
+    """
+    Computes numerator/denominator, but if denominator is 0 then returns 0.
+    """
+    
+    return numerator / denominator if denominator != 0 else 0
