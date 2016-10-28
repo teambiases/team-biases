@@ -11,15 +11,17 @@ SPECTRUMLANG1=en
 SPECTRUMLANG2=ru
 DUMPDATE=20160820
 COMBINED_ID=$(TARGETLANG)-$(SPECTRUMLANG1)-$(SPECTRUMLANG2)-wiki-$(DUMPDATE)
-CORPUS_QUERY="subcategories_of('Categoría:Guerra_Fría') > 0"
+CORPUS_QUERY="subcategories_of('Categoría:Guerra_Fría', 3) > 0"
 CORPUS_NAME=coldwar
+
+SAMPLE_SEED=nov2016
 
 LDA_TOPICS=2000
 LDA_PASSES=5
 
 .PRECIOUS: $(DATADIR)/wikipedia/dict/%.dict.pickle
 .INTERMEDIATE: $(LIBDIR)/spark-%.tgz
-.PHONY: topicmodel topicscorpus
+.PHONY: topicmodel topicscorpus mturktasks
 
 $(LIBDIR) :
 	mkdir $@
@@ -110,3 +112,29 @@ $(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).$(LDA_TOPICS)topics.pi
 	$(PYTHON) $^ $@
 	
 topicscorpus: $(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).$(LDA_TOPICS)topics.pickle
+
+# Split corpus into chunks
+
+$(DATADIR)/wikipedia/chunks/$(CORPUS_NAME).$(COMBINED_ID).chunks.pickle : scripts/split_chunks.py \
+	$(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).titles.txt \
+	$(DATADIR)/wikipedia/dump/$(TARGETLANG)wiki-$(DUMPDATE)-pages-articles.xml.bz2 \
+	$(DATADIR)/wikipedia/langlinks/$(TARGETLANG)-$(SPECTRUMLANG1)-$(SPECTRUMLANG2)-$(DUMPDATE).langlinks.csv
+	mkdir -p $(dir $@)
+	$(PYTHON) $^ $@
+	
+# Sample chunks
+
+$(DATADIR)/wikipedia/chunks/$(CORPUS_NAME).$(COMBINED_ID).chunks.$(SAMPLE_SEED).sample.txt : scripts/sample_chunks.py \
+	$(DATADIR)/wikipedia/chunks/$(CORPUS_NAME).$(COMBINED_ID).chunks.pickle
+	mkdir -p $(dir $@)
+	$(PYTHON) $^ $@ $(SAMPLE_SEED)
+	
+# Output mechanical turk tasks
+
+$(DATADIR)/wikipedia/mturk/$(CORPUS_NAME).$(COMBINED_ID).$(SAMPLE_SEED).tasks.csv : scripts/sample_to_mturk_tasks.py \
+	$(DATADIR)/wikipedia/chunks/$(CORPUS_NAME).$(COMBINED_ID).chunks.$(SAMPLE_SEED).sample.txt \
+	$(DATADIR)/wikipedia/chunks/$(CORPUS_NAME).$(COMBINED_ID).chunks.pickle
+	mkdir -p $(dir $@)
+	$(PYTHON) $^ $@ $(SAMPLE_SEED)
+	
+mturktasks: $(DATADIR)/wikipedia/mturk/$(CORPUS_NAME).$(COMBINED_ID).$(SAMPLE_SEED).tasks.csv
