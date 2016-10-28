@@ -11,6 +11,7 @@ from biases.wiki.text import extract_links
 from gensim.corpora import wikicorpus
 from gensim.models import TfidfModel
 from biases.wiki.titles import make_wiki_title
+from biases.wiki.categories import get_subcategories
 
 ALL_SEARCH_QUERIES = {}
 
@@ -164,18 +165,12 @@ def category_occurences(corpus, dict, categories, category_prefix, phrase):
         return occurences
     return SearchQuery(category_occurences_query)
 
-@make_search_query('category_occurences(\'Category:name\'): number of subcategories of the given category that this article appears in')
-def subcategories_of(corpus, dict, categories, category):
+@make_search_query('subcategories_of(\'Category:name\', depth): number of subcategories of the given category (within the given depth) that this article appears in')
+def subcategories_of(corpus, dict, categories, category, depth = -1):
     logging.info('determining subcategories of \"%s\"', category)
-    # Use tree search to get all subcategories for given category
-    subcategory_frontier = {category}
-    subcategories = set()
-    while len(subcategory_frontier) > 0:
-        subcategory = next(iter(subcategory_frontier))
-        subcategory_frontier.remove(subcategory)
-        subcategories.add(subcategory)
-        subcategory_frontier |= (set(categories[subcategory]) - subcategories)
-    logging.info('found %d subcategories', len(subcategories))
+    subcategories = get_subcategories(categories, category, depth)
+    depth_message = '' if depth == -1 else ' within depth {}'.format(depth)
+    logging.info('found %d subcategories' + depth_message, len(subcategories))
     
     def subcategories_of_query(content):
         num_subcategories = 0
@@ -186,6 +181,27 @@ def subcategories_of(corpus, dict, categories, category):
         return num_subcategories
     
     return SearchQuery(subcategories_of_query)
+
+@make_search_query('subcategory_depth_of(\'Category:name\'): minimum depth below the given category of any category in this article')
+def subcategory_depth_of(corpus, dict, categories, category):
+    logging.info('determining subcategories of \"%s\"', category)
+    subcategories = {category: category.depth for category in 
+                     get_subcategories(categories, category)}
+    logging.info('found %d subcategories', len(subcategories))
+    
+    def subcategory_depth_of_query(content):
+        min_depth = float('inf')
+        for link_article, link_text in extract_links(content):
+            link_article = make_wiki_title(link_article)
+            try:
+                depth = subcategories[link_article]
+                if depth < min_depth:
+                    min_depth = depth
+            except KeyError:
+                pass
+        return min_depth
+    
+    return SearchQuery(subcategory_depth_of_query)
 
 @make_search_query('tfidf_similarity(\'Article title\'): tfidf cosine similarity to the given article')
 def tfidf_similarity(corpus, dictionary, categories, seed_article_title):
