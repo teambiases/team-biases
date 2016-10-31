@@ -138,3 +138,8 @@ $(DATADIR)/wikipedia/mturk/$(CORPUS_NAME).$(COMBINED_ID).$(SAMPLE_SEED).tasks.cs
 	$(PYTHON) $^ $@ $(SAMPLE_SEED)
 	
 mturktasks: $(DATADIR)/wikipedia/mturk/$(CORPUS_NAME).$(COMBINED_ID).$(SAMPLE_SEED).tasks.csv
+
+# Render versions of mechanical turk survey
+
+web/mturk-wiki-bias/%.html : scripts/render_template.py web/mturk-wiki-bias/base.html web/mturk-wiki-bias/%.json
+	$(PYTHON) $^ $@
