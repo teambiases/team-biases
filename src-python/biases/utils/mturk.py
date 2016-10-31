@@ -9,10 +9,9 @@ ACCESS_ID ='AKIAIK2VPYKSBVTE2DKA'
 SECRET_KEY = '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'
 HOST = 'mechanicalturk.sandbox.amazonaws.com'
  
-mtc = MTurkConnection(aws_access_key_id=ACCESS_ID,
-                      aws_secret_access_key=SECRET_KEY,
-                      host=HOST)
-
+mturk_connection = MTurkConnection(aws_access_key_id=ACCESS_ID,
+                                   aws_secret_access_key=SECRET_KEY,
+                                   host=HOST)
 
 #print(mtc.get_account_balance())
 
