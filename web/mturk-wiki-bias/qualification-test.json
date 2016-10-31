@@ -1,0 +1,31 @@
+{
+    "selections": [
+        {
+            "sentences": [
+                "The My Lai massacre was a mass killing of Vietnamese citizens by the U.S. Army during the Vietnam War.",
+                "Although between 347 and 507 unarmed citizens were killed, the action was highly atypical of the U.S. Army, which made minimizing collateral damage a priority during the conflict.",
+                "The My Lai massacre was one of the deadliest mass killings of civilians ever by the U.S. Army.",
+                "Out of 26 soldiers charged with war crimes, only one, Lieutenant William Calley Junior, was sentenced.",
+                "He originally received a life sentence, which was commuted to three and a half years of house arrest.",
+                "The massacre led to the unfair moniker of ‘baby killer’ often used by protesters to describe U.S. soldiers.",
+                "The action was frequently brought up in reference to Soviet operations in Afghanistan years later, which were often as atrocious or worse.",
+                "The site is now a memorial containing graves and a monument.",
+                "It is a popular pilgrimage site for veterans on both sides of the conflict."
+            ],
+            "correct_tags": ["none", "us", "none", "none", "none", "us", "us", "none", "none"],
+            "correct_bias": {"us": 2, "soviet": -2}
+        },
+        {
+            "sentences": [
+                "Conditions in the gulags varied greatly over time, depending on the availability of food and other resources, political conditions, and the specific camp.",
+                "In the early days of the gulag labor camps, before World War II, the world was largely unaware of the existence of the camps beyond scarce rumors due to the tight control of information in and out of the U.S.S.R.",
+                "During the war, United States officials were often hesitant to criticize the policies of their allies, consistent with a trend of turning a blind eye to human rights abuses among opportunistic American politicians.",
+                "Although some scholars have pointed out similarities to the internment of Japanese Americans, these comparisons fail to take into account the vastly smaller number of inmates and the relatively better treatment of prisoners by the Americans.",
+                "During the period of the war, fatalities in the gulags were four to six times higher than during other periods due to the needs of the Red Army.",
+                "However, the conditions in gulags during the war were vastly superior to the squalor of Japanese prison camps used to hold POWs."
+            ],
+            "correct_tags": ["none", "none", "soviet", "us", "none", "soviet"],
+            "correct_bias": {"us": -1, "soviet": 1}
+        }
+    ]
+}
