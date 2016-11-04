@@ -32,9 +32,11 @@
     -o-user-select: none; user-select: none; }
 .sentence { cursor: pointer; }
 .sentence:hover { text-decoration: underline; }
-.united-states, .soviet { border-radius: 2px; padding: 2px; }
-.united-states { background-color: #d9edf7; }
-.soviet { background-color: #f2dede; }
+.united-states-t, .united-states-a, .soviet-t, .soviet-a { border-radius: 2px; padding: 2px; }
+.united-states-t { background-color: #d9edf7; }
+.united-states-a { background-color: #dff0d8; }
+.soviet-t { background-color: #f2dede; }
+.soviet-a { background-color: #fcf8e3; }
   </style>
   
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -56,7 +58,7 @@
               </small>
             </h4>
           </div>
-          <div id="instructions-body" class="collapse">
+          <div id="instructions-body" class="collapse in">
             <div class="panel-body">
               <p>Hello! Thank you for taking the time to be a part of this
                 survey. Today, the following survey is looking to detect and
@@ -69,16 +71,17 @@
               <ul>
                 <li>If a sentence is biased, please click on that sentence
                   and then select which direction the bias exists: either
-                  &ldquo;toward the United States&rdquo; or &ldquo;towards the
-                  Soviet Union&rdquo;</li>
+                  &ldquo;toward the United States,&rdquo; &ldquo;against the
+                  United States,&rdquo; &ldquo;towards the Soviet Union,&rdquo;
+                  or &ldquo;against the Soviet Union&rdquo;</li>
                 <li>If you later decide that a sentence is not biased,
                   click on that sentence and select &ldquo;clear
                   annotation&rdquo;</li>
               </ul>
-              After going through the text and tagging the text with the
+              <p>After going through the text and tagging the text with the
               applicable above tags, you will be asked to answer two questions
               determining overall text bias. Upon both tagging the text and
-              answering the two questions, you will have completed the survey.
+              answering the two questions, you will have completed the survey.</p>
               
               $extra_instructions
             </div>
@@ -99,8 +102,10 @@
           </div>
           <ul class="list-group">
             <li class="list-group-item">Key: 
-              <span class="united-states">Biased towards the United States</span>
-              <span class="soviet">Biased towards the Soviet Union</span>
+              <span class="united-states-t">Biased towards the United States</span>
+              <span class="united-states-a">Biased against the United States</span>
+              <span class="soviet-t">Biased towards the Soviet Union</span>
+              <span class="soviet-a">Biased against the Soviet Union</span>
             </li>
           </ul>
         </div>
@@ -137,7 +142,7 @@
       </div>
     </div>
     
-    <form>
+    <form action=>
       <input type="hidden" name="sentences" id="sentences-input" />
       <input type="hidden" name="us_bias" id="us-bias-input" />
       <input type="hidden" name="soviet_bias" id="soviet-bias-input" />
@@ -165,7 +170,7 @@ $$(function() {
   }).slider('value', 0);
   
   var sentenceAnnotations = [];
-  var annotationClasses = ['sentence', 'united-states', 'soviet'];
+  var annotationClasses = ['sentence', 'united-states-t', 'united-states-a', 'soviet-t', 'soviet-a'];
   var i = 0;
   $$('.sentence').each(function() {
       sentenceAnnotations.push(0);
@@ -192,8 +197,10 @@ $$(function() {
       $$('#sentences-input').val(sentenceAnnotations.join(''));
     },
     items: {
-      'united-states': {name: 'Biased towards the United States'},
-      'soviet': {name: 'Biased towards the Soviet Union'},
+      'united-states-t': {name: 'Biased towards the United States'},
+      'united-states-a': {name: 'Biased against the United States'},
+      'soviet-t': {name: 'Biased towards the Soviet Union'},
+      'soviet-a': {name: 'Biased against the Soviet Union'},
       'sep1': "---------",
       'sentence': {name: 'Clear annotation'}
     }
