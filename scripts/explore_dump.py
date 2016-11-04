@@ -60,6 +60,6 @@ if __name__ == '__main__':
             for title, content, pageid in \
                     wikicorpus.extract_pages(wiki_dump_file,
                                              filter_namespaces=('0',)):
-                results.writerow([title] + [query_func(content) for query_func
+                results.writerow([title] + [query_func(title, content) for query_func
                                             in query_funcs])
     

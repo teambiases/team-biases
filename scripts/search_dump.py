@@ -54,7 +54,7 @@ if __name__ == '__main__':
             for title, content, pageid in \
                     wikicorpus.extract_pages(wiki_dump_file,
                                              filter_namespaces=('0',)):
-                if search_query_func(content):     
+                if search_query_func(title, content):     
                     titles_out_file.write(make_wiki_title(title) + '\n')
                     num_hits += 1
                     

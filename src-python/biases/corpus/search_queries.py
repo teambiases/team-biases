@@ -25,15 +25,15 @@ class SearchQuery(object):
         """
         self.query_func = query_func
         
-    def __call__(self, content):
-        return self.query_func(content)
+    def __call__(self, title, content):
+        return self.query_func(title, content)
         
     def _operation(self, op, other = None):
-        def new_query_func(content):
+        def new_query_func(title, content):
             args = [self(content)]
             if other is not None:
                 if isinstance(other, SearchQuery):
-                    args.append(other(content))
+                    args.append(other(title, content))
                 else:
                     args.append(other)
             return op(*args)
@@ -128,7 +128,7 @@ def load_keywords_from_file(keywords_fname):
 @make_search_query('keyword_portion(\'keywords.txt\'): portion of keywords that are present in article')
 def keyword_portion(corpus, dict, categories, keywords_fname):
     keywords = load_keywords_from_file(keywords_fname)
-    def keyword_portion_query(content):
+    def keyword_portion_query(title, content):
         word_set = {word.decode('utf-8') for word in
                     wikicorpus.tokenize(wikicorpus.filter_wiki(content))}
         keywords_in_words = sum(keyword in word_set for keyword in keywords)
@@ -138,7 +138,7 @@ def keyword_portion(corpus, dict, categories, keywords_fname):
 @make_search_query('word_portion(\'keywords.txt\'): portion of words in article that are keywords')
 def word_portion(corpus, dict, categories, keywords_fname):
     keywords = load_keywords_from_file(keywords_fname)
-    def word_portion_query(content):
+    def word_portion_query(title, content):
         words = [word.decode('utf-8') for word in
                  wikicorpus.tokenize(wikicorpus.filter_wiki(content))]
         words_in_keywords = sum(word in keywords for word in words)
@@ -148,14 +148,14 @@ def word_portion(corpus, dict, categories, keywords_fname):
 @make_search_query('text_occurences(\'phrase\'): number of times \'phrase\' (case-insensitive) appears in the text') 
 def text_occurences(corpus, dict, categories, phrase):
     phrase = phrase.lower()
-    def text_occurences_query(content):
+    def text_occurences_query(title, content):
         return content.lower().count(phrase)
     return SearchQuery(text_occurences_query)
     
 @make_search_query('category_occurences(\'Category-prefix:\', \'phrase\'): number of times \'phrase\' appears in categories of this article')
 def category_occurences(corpus, dict, categories, category_prefix, phrase):
     phrase = phrase.lower()
-    def category_occurences_query(content):
+    def category_occurences_query(title, content):
         links = extract_links(content)
         occurences = 0
         for article, link_text in links:
@@ -172,7 +172,7 @@ def subcategories_of(corpus, dict, categories, category, depth = -1):
     depth_message = '' if depth == -1 else ' within depth {}'.format(depth)
     logging.info('found %d subcategories' + depth_message, len(subcategories))
     
-    def subcategories_of_query(content):
+    def subcategories_of_query(title, content):
         num_subcategories = 0
         for link_article, link_text in extract_links(content):
             link_article = make_wiki_title(link_article)
@@ -189,7 +189,7 @@ def subcategory_depth_of(corpus, dict, categories, category):
                      get_subcategories(categories, category)}
     logging.info('found %d subcategories', len(subcategories))
     
-    def subcategory_depth_of_query(content):
+    def subcategory_depth_of_query(title, content):
         min_depth = float('inf')
         for link_article, link_text in extract_links(content):
             link_article = make_wiki_title(link_article)
@@ -202,6 +202,32 @@ def subcategory_depth_of(corpus, dict, categories, category):
         return min_depth
     
     return SearchQuery(subcategory_depth_of_query)
+
+@make_search_query('categories_in([\'Category:first category\', ...]): number of categories this article has in the given list')
+def categories_in(corpus, dict, categories, category_list):
+    category_set = {make_wiki_title(category) for category in category_list}
+    
+    def categories_in_query(title, content):
+        num_categories = 0
+        for link_article, link_text in extract_links(content):
+            link_article = make_wiki_title(link_article)
+            if link_article in category_set:
+                num_categories += 1
+        return num_categories
+    
+    return SearchQuery(categories_in_query)
+
+@make_search_query('is_category_main_article(): 1 if this is a main article for a category, 0 otherwise')
+def is_category_main_article(corpus, dict, categories):
+    # Get 'Category:' prefix for this language
+    random_category = next(iter(categories))
+    category_prefix = random_category[:random_category.index(':') + 1]
+    
+    def is_category_main_article_query(title, content):
+        title = make_wiki_title(title)
+        return 1 if (category_prefix + title) in categories else 0
+        
+    return SearchQuery(is_category_main_article_query)
 
 @make_search_query('tfidf_similarity(\'Article title\'): tfidf cosine similarity to the given article')
 def tfidf_similarity(corpus, dictionary, categories, seed_article_title):
@@ -224,7 +250,7 @@ def tfidf_similarity(corpus, dictionary, categories, seed_article_title):
         logging.info('Loading seed article "%s"', seed_article_title)
         seed_article = dict(mm.docbyoffset(seed_article_offset))
         
-        def tfidf_similarity_query(content):
+        def tfidf_similarity_query(title, content):
             tokens = wikicorpus.tokenize(wikicorpus.filter_wiki(content))
             vector = dict(tfidf[dictionary.doc2bow(tokens)])
             return cosine_similarity(seed_article, vector)
