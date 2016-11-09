@@ -30,7 +30,7 @@ class SearchQuery(object):
         
     def _operation(self, op, other = None):
         def new_query_func(title, content):
-            args = [self(content)]
+            args = [self(title, content)]
             if other is not None:
                 if isinstance(other, SearchQuery):
                     args.append(other(title, content))
