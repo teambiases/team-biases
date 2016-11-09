@@ -12,8 +12,8 @@
                 "The site is now a memorial containing graves and a monument.",
                 "It is a popular pilgrimage site for veterans on both sides of the conflict."
             ],
-            "correct_tags": ["none", "us", "none", "none", "none", "us", "us", "none", "none"],
-            "correct_bias": {"us": 2, "soviet": -2}
+            "correct_tags": ["none", "us-towards", "none", "none", "none", "soviet-against", "soviet-against", "none", "none"],
+            "correct_bias": {"us": 2, "soviet": -1}
         },
         {
             "sentences": [
@@ -24,7 +24,7 @@
                 "During the period of the war, fatalities in the gulags were four to six times higher than during other periods due to the needs of the Red Army.",
                 "However, the conditions in gulags during the war were vastly superior to the squalor of Japanese prison camps used to hold POWs."
             ],
-            "correct_tags": ["none", "none", "soviet", "us", "none", "soviet"],
+            "correct_tags": ["none", "none", "us-against", "us-towards", "none", "soviet-towards"],
             "correct_bias": {"us": -1, "soviet": 1}
         }
     ]

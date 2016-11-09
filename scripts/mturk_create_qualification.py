@@ -56,8 +56,10 @@ if __name__ == '__main__':
                         style = 'radiobutton',
                         selections = [
                             ('Not biased', 'none'),
-                            ('Biased towards the United States', 'us'),
-                            ('Biased towards the Soviet Union', 'soviet')
+                            ('Biased towards the United States', 'us-towards'),
+                            ('Biased against the United States', 'us-against'),
+                            ('Biased towards the Soviet Union', 'soviet-towards')
+                            ('Biased against the Soviet Union', 'soviet-against'),
                         ]))
                         
                 sentence_question = Question(question_identifier,
