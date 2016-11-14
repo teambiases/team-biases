@@ -4,6 +4,7 @@ import sys, logging, pickle
 import numpy as np
 
 from gensim.models import LdaModel
+from gensim.models.ldamodel import get_random_state
 from gensim.corpora import MmCorpus
 
 from biases.utils.math import sparse2dense
@@ -26,6 +27,8 @@ if __name__ == '__main__':
             logging.info('Loaded %d titles in corpus', len(titles_set))
             
         lda_model = LdaModel.load(lda_fname)
+        if not hasattr(lda_model, 'random_state'):
+            lda_model.random_state = get_random_state(None)
         freq_dict = lda_model.id2word
         langs = []
         id2lang = {}
@@ -46,7 +49,6 @@ if __name__ == '__main__':
                 lang_vectors = {lang: [] for lang in langs}
                 for word_id, weight in vector:
                     lang_vectors[id2lang[word_id]].append((word_id, weight))
-                print(titles)
                 for corpus_topics, corpus_titles, lang, title in \
                         zip(corpora_topics, corpora_titles, langs, titles):
                     lang_vector = lang_vectors[lang]
