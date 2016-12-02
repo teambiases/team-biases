@@ -16,8 +16,8 @@ CORPUS_NAME=coldwar
 
 SAMPLE_SEED=nov2016
 
-LDA_TOPICS=2000
-LDA_PASSES=5
+LDA_TOPICS=100
+LDA_PASSES=3
 
 .PRECIOUS: $(DATADIR)/wikipedia/dict/%.dict.pickle
 .INTERMEDIATE: $(LIBDIR)/spark-%.tgz
@@ -111,7 +111,16 @@ $(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).$(LDA_TOPICS)topics.pi
 	$(DATADIR)/lda/$(COMBINED_ID).parallel.$(LDA_TOPICS)t.lda.pickle
 	$(PYTHON) $^ $@
 	
-topicscorpus: $(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).$(LDA_TOPICS)topics.pickle
+# Analyze corpus with topics
+
+$(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).$(LDA_TOPICS)topics.analysis.csv : \
+	scripts/analyze_topics_corpus.py \
+	$(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).$(LDA_TOPICS)topics.pickle \
+	$(DATADIR)/lda/$(COMBINED_ID).parallel.$(LDA_TOPICS)t.lda.pickle
+	$(PYTHON) $^ $@
+	
+topicscorpus: $(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).$(LDA_TOPICS)topics.pickle \
+	$(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).$(LDA_TOPICS)topics.analysis.csv
 
 # Split corpus into chunks
 
