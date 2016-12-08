@@ -5,6 +5,7 @@ import re
 import itertools
 import nltk
 import random
+import html
 
 from gensim.corpora.wikicorpus import filter_wiki
 
@@ -171,3 +172,22 @@ def print_chunk(chunk):
     print('=== {} ({} words) ==='.format(chunk_id_str, chunk_length(chunk)))
     for paragraph in chunk.paragraphs:
         print('{}\n'.format(' '.join(paragraph)))
+        
+def chunk_to_html(chunk):
+    """
+    Converts the given chunk to HTML, wrapping each sentence in
+    <span class="sentence"></span>.
+    """
+    
+    chunk_html = ''
+    for paragraph in chunk.paragraphs:
+        paragraph_html = '<p>'
+        for sentence in paragraph:
+            sentence_html = '<span class="sentence">'
+            sentence_html += html.escape(sentence).replace('\n', '<br>')
+            sentence_html += '</span> '
+            paragraph_html += sentence_html
+        paragraph_html += '</p>'
+        chunk_html += paragraph_html
+        
+    return chunk_html

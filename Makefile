@@ -146,7 +146,7 @@ $(DATADIR)/wikipedia/mturk/$(CORPUS_NAME).$(COMBINED_ID).$(SAMPLE_SEED).tasks.cs
 	$(DATADIR)/wikipedia/chunks/$(CORPUS_NAME).$(COMBINED_ID).chunks.$(SAMPLE_SEED).sample.txt \
 	$(DATADIR)/wikipedia/chunks/$(CORPUS_NAME).$(COMBINED_ID).chunks.pickle
 	mkdir -p $(dir $@)
-	$(PYTHON) $^ $@ $(SAMPLE_SEED)
+	$(PYTHON) $^ $@
 	
 mturktasks: $(DATADIR)/wikipedia/mturk/$(CORPUS_NAME).$(COMBINED_ID).$(SAMPLE_SEED).tasks.csv
 
