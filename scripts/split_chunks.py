@@ -52,5 +52,5 @@ if __name__ == '__main__':
         
         logging.info('writing chunks to %s', chunks_fname)
         with open(chunks_fname, 'wb') as chunks_file:
-            pickle.write(chunks, chunks_file)
+            pickle.dump(chunked_articles, chunks_file)
             

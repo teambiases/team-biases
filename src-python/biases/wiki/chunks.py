@@ -99,12 +99,8 @@ def chunk_section(article_title, section_index, section_content):
                   re.split(r'\n{2,}', section_content)]
     
     # Filter first paragraph if it looks like a title
-    print(repr(paragraphs[0]))
     if paragraphs[0] == '' or paragraphs[0][0] in '=\n':
-        print('Discard!')
         paragraphs = paragraphs[1:]
-    else:
-        print('Keep')
     
     # Tokenize paragraphs into sentences
     paragraphs = [nltk.sent_tokenize(paragraph) for paragraph in paragraphs
@@ -150,16 +146,11 @@ def chunk_section(article_title, section_index, section_content):
         return tuple(splits)
     
     splits = beam_search(tuple(paragraph_splits), objective, mutate)
-    print(splits)
-    print(paragraphs)
     
     chunks =  [Chunk((article_title, section_index, chunk_index),
                      chunk_paragraphs)
                for chunk_index, chunk_paragraphs in
                enumerate(split_paragraphs(paragraphs, splits))]
-    
-    print(chunks)
-    print(list(map(chunk_length, chunks)))
     
     return chunks
     
@@ -170,3 +161,13 @@ def chunk_length(chunk):
     
     return sum(sum(len(sentence.split()) for sentence in paragraph) for
                paragraph in chunk.paragraphs)
+    
+def print_chunk(chunk):
+    """
+    Pretty prints a chunk to stdout.
+    """
+    
+    chunk_id_str = '{} section {} chunk {}'.format(*chunk.id)
+    print('=== {} ({} words) ==='.format(chunk_id_str, chunk_length(chunk)))
+    for paragraph in chunk.paragraphs:
+        print('{}\n'.format(' '.join(paragraph)))
