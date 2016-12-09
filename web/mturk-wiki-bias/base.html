@@ -38,9 +38,9 @@
 .soviet-t { background-color: #f2dede; }
 .soviet-a { background-color: #fcf8e3; }
   
-body .english, body .spanish { display: none }
-body.english .english { display: block; }
-body.spanish .spanish { display: block; }
+.container-fluid .english, .container-fluid .spanish { display: none }
+.container-fluid.english .english { display: block; }
+.container-fluid.spanish .spanish { display: block; }
   </style>
   
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -51,7 +51,7 @@ body.spanish .spanish { display: block; }
   <![endif]-->
 </head>
 <body class="$language" style="padding: 15px 0;">
-  <div class="container-fluid">
+  <div class="container-fluid $language">
     <div class="row">
       <div class="col-md-12">
         <div id="instructions" class="panel panel-primary">
