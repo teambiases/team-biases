@@ -18,33 +18,35 @@ if __name__ == '__main__':
         qual_test = QuestionForm()
         
         overview = Overview()
-        overview.append(SimpleField('Title', 'Qualification test overview'))
+        overview.append(SimpleField('Title', 'Resumen de la prueba de calificación'))
         overview.append(SimpleField('Text',
-                '''Hello! Thank you for taking the time to be a part of this \
-                survey. The following survey is looking to detect and \
-                understand bias at a sentence level in Spanish texts. For the \
-                purposes of this survey, bias is defined as imbalances in \
-                presentation that would suggest a preference or prejudice. \
-                You will be required to tag bias in two short selections \
-                of text. \
-                In order to be approved for this qualificiation, you must \
-                complete the below test with 80% accuracy.'''))
+                '''Hola, Muchas gracias por dedicar tu tiempo y participar en \
+                esta encuesta. La encuesta busca detectar y entender la \
+                tendencia de la parcialidad en una frase o oración en español.\
+                Para el propósito de esta encuesta, parcialidad tiene la \
+                definición de existencia de  imbalance, lo que conlleva a \
+                sugerir la existencia de preferencia o preconcepción. Se
+                requiere que Ud. remarque la parcialidad en dos frases cortas.
+
+                Para poder aprobar en esta calificación, Ud. deberá completar \
+                el siguiente test con una exactitud de 80 %.'''))
         qual_test.append(overview)
         
         for selection_index, selection in \
                 enumerate(qual_test_json['selections']):
             selection_overview = Overview()
-            selection_overview.append(SimpleField('Title', 'Text selection {}'
+            selection_overview.append(SimpleField('Title', 'Selección de texto {}'
                     .format(selection_index + 1)))
             selection_overview.append(SimpleField('Text',
-                    '''Please read the following text:'''))
+                    '''Por favor lea el siguiente texto :'''))
             selection_overview.append(SimpleField('Text',
                     ' '.join(selection['sentences'])))
             selection_overview.append(SimpleField('Text',
-                    '''Now, mark which sentences are biased. For each sentence, \
-                    decide whether it is biased towards the United States, \
-                    towards the Soviet Union, or if it is not biased. Note that \
-                    most sentences are not biased.'''))
+                    '''Marcar que frases muestran parcialidad. Por cada \
+                    sentencia, decidir si la parcialidad es hacia los \
+                    Estados Unidos or hacia la Unión Soviética, o si no \
+                    existe parcialidad. Cabe resaltar que muchas de las \
+                    frases no demuestran parcialidad.'''))
             qual_test.append(selection_overview)
             
             for sentence_index, sentence in enumerate(selection['sentences']):
@@ -55,11 +57,11 @@ if __name__ == '__main__':
                 answer_spec = AnswerSpecification(SelectionAnswer(
                         style = 'radiobutton',
                         selections = [
-                            ('Not biased', 'none'),
-                            ('Biased towards the United States', 'us-towards'),
-                            ('Biased against the United States', 'us-against'),
-                            ('Biased towards the Soviet Union', 'soviet-towards')
-                            ('Biased against the Soviet Union', 'soviet-against'),
+                            ('No Parcialidad', 'none'),
+                            ('Parcialidad hacia los Estados Unidos', 'us-towards'),
+                            ('Parcialidad contra los Estados Unidoss', 'us-against'),
+                            ('Parcialidad hacia la Unión Soviética', 'soviet-towards'),
+                            ('Parcialidad contra la Unión Soviética', 'soviet-against'),
                         ]))
                         
                 sentence_question = Question(question_identifier,
@@ -69,28 +71,29 @@ if __name__ == '__main__':
             
             bias_overview = Overview()
             bias_overview.append(SimpleField('Text',
-                    '''Now, answer the following two questions about the \
-                    overall bias of the text (all the sentences).'''))
+                    '''Contestar las dos preguntas siguientes acerca de la \
+                    parcialidad en general en el texto. (Todas las frases)'''))
             qual_test.append(bias_overview)
             
-            for country_id, country_name in [('us', 'United States'),
-                                             ('soviet', 'Soviet Union')]:
+            for country_id, country_name in [('us', 'los Estados Unidos'),
+                                             ('soviet', 'la Unión Soviética')]:
                 question_identifier = 'selection-{}-bias-{}' \
                         .format(selection_index, country_id)
                 question_content = QuestionContent()
                 question_content.append(SimpleField('Text',
-                        'How biased is the text towards or against the {}?'
+                        'Cual es el sentido de la parcialidad en el texto? '
+                        + 'Favorable o desfavorable hacia {}?'
                         .format(country_name)))
                 answer_spec = AnswerSpecification(SelectionAnswer(
                         style = 'radiobutton',
                         selections = [
-                            ('Very biased against', '-3'),
-                            ('Moderately biased against', '-2'),
-                            ('Slightly biased against', '-1'),
-                            ('Not biased', '0'),
-                            ('Slightly biased towards', '1'),
-                            ('Moderately biased towards', '2'),
-                            ('Very biased towards', '3')
+                            ('Totalmente en contra de la parcialidad', '-3'),
+                            ('Moderadamente en contra de la parcialidad', '-2'),
+                            ('Ligeramente en contra de la parcialidad', '-1'),
+                            ('No existe parcialidad', '0'),
+                            ('Ligeramente parcial', '1'),
+                            ('Moderadamente parcial', '2'),
+                            ('Totalmente parcial', '3')
                         ]))
                         
                 bias_question = Question(question_identifier, question_content,
@@ -98,7 +101,7 @@ if __name__ == '__main__':
                 qual_test.append(bias_question)
         
         mturk_connection.create_qualification_type(qual_name,
-                '''Able to read and understand bias in Spanish.''',
+                '''Capaz de leer y entender parcialidad en espanol.''',
                 status = 'Active',
                 keywords = ['Spanish', 'bias', 'Espa\xf1ol', 'tag'],
                 test = qual_test,

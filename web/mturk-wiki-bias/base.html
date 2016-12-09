@@ -37,6 +37,10 @@
 .united-states-a { background-color: #dff0d8; }
 .soviet-t { background-color: #f2dede; }
 .soviet-a { background-color: #fcf8e3; }
+  
+body .english, body .spanish { display: none }
+body.english .english { display: block; }
+body.spanish .spanish { display: block; }
   </style>
   
   <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -46,29 +50,44 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
 </head>
-<body style="padding: 15px 0;">
+<body class="$language" style="padding: 15px 0;">
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-12">
         <div id="instructions" class="panel panel-primary">
           <div class="panel-heading">
-            <h4 class="panel-title">
+            <h4 class="panel-title english">
               Instructions <small> <a role="button"
+                data-toggle="collapse" href="#instructions-body"> show/hide</a>
+              </small>
+            </h4>
+            <h4 class="panel-title spanish">
+              Instrucciones <small> <a role="button"
                 data-toggle="collapse" href="#instructions-body"> show/hide</a>
               </small>
             </h4>
           </div>
           <div id="instructions-body" class="collapse in">
             <div class="panel-body">
-              <p>Hello! Thank you for taking the time to be a part of this
-                survey. Today, the following survey is looking to detect and
-                understand bias at a sentence level in Spanish texts on media
-                about the Cold War. For the purposes of this survey, bias is
-                defined as imbalances in presentation that would suggest a
-                preference or prejudice. In the following text, we ask that you
-                read the sentences, and be able to select whether a specific
+              <p class="english">Hello! Thank you for taking the time to be
+                a part of this survey. Today, the following survey is looking to
+                detect and understand bias at a sentence level in Spanish texts
+                on media about the Cold War. For the purposes of this survey,
+                bias is defined as imbalances in presentation that would suggest
+                a preference or prejudice. In the following text, we ask that
+                you read the sentences, and be able to select whether a specific
                 sentence is biased, and the direction in which it is biased.</p>
-              <ul>
+              <p class="spanish">Hola, muchas gracias por dedicar tu tiempo
+                y participar en esta encuesta. La encuesta busca detectar y
+                entender la tendencia de la parcialidad en una frase o oración
+                en español dentro de los medios de comunicación referente a la
+                Guerra Fria. Para el propósito de esta encuesta, parcialidad
+                tiene la definición de existencia de imbalance, lo que conlleva
+                a sugerir la existencia de preferencia o preconcepción. En el
+                párrafo siguiente, le pedimos que lea las frases, y que
+                seleccione y especifique que sentencia es parcial y cual es la
+                dirección de la parcialidad.</p>
+              <ul class="english">
                 <li>If a sentence is biased, please click on that sentence
                   and then select which direction the bias exists: either
                   &ldquo;toward the United States,&rdquo; &ldquo;against the
@@ -78,11 +97,25 @@
                   click on that sentence and select &ldquo;clear
                   annotation&rdquo;</li>
               </ul>
-              <p>After going through the text and tagging the text with the
-              applicable above tags, you will be asked to answer two questions
-              determining overall text bias. Upon both tagging the text and
-              answering the two questions, you will have completed the survey.</p>
-              
+              <ul class="spanish">
+                <li>Si la sentencia muestra parcialidad, por favor
+                  seleccione la sentencia con el cursor y luego seleccione la
+                  dirección de la parcialidad : ya sea hacia los Estados Unidos;
+                  or; hacia la Unión Soviética.</li>
+                <li>Si Ud. luego decide que la sentencia no es parcial,
+                  seleccione la sentencia con el cursor y elimine la selección.</li>
+              </ul>
+              <p class="english">After going through the text and tagging
+                the text with the applicable above tags, you will be asked to
+                answer two questions determining overall text bias. Upon both
+                tagging the text and answering the two questions, you will have
+                completed the survey.</p>
+              <p class="spanish">Después de revisar todo el parrafo y
+                seleccionar sus etiquetas, por favor conteste dos preguntas que
+                determinarán la parcialidad del párrafo en general. Después de
+                etiquetar y contestar las dos preguntas, Ud. habrá terminado la
+                encuesta.</p>
+
               $extra_instructions
             </div>
           </div>
@@ -90,9 +123,13 @@
 
         <div id="annotation" class="panel panel-default">
           <div class="panel-heading">
-            <h4 class="panel-title">
+            <h4 class="panel-title english">
               Text to annotate <small>(click on a sentence to annotate
                 it)</small>
+            </h4>
+            <h4 class="panel-title spanish">
+              Texto para anotar <small>(seleccione
+                con el cursor en la sentencia y anote)</small>
             </h4>
           </div>
           <div class="panel-body" unselectable="on">
@@ -100,7 +137,7 @@
               $sentences
             </div>
           </div>
-          <ul class="list-group">
+          <ul class="list-group english">
             <li class="list-group-item">Key: 
               <span class="united-states-t">Biased towards the United States</span>
               <span class="united-states-a">Biased against the United States</span>
@@ -108,14 +145,26 @@
               <span class="soviet-a">Biased against the Soviet Union</span>
             </li>
           </ul>
+          <ul class="list-group spanish">
+            <li class="list-group-item">Guía: 
+              <span class="united-states-t">Parcialidad hacia los Estados Unidos</span>
+              <span class="united-states-a">Parcialidad contra los Estados Unidos</span>
+              <span class="soviet-t">Parcialidad hacia la Unión Soviética</span>
+              <span class="soviet-a">Parcialidad contra la Unión Soviética</span>
+            </li>
+          </ul>
         </div>
 
-        <h4>Questions</h4>
+        <h4 class="english">Questions</h4>
+        <h4 class="spanish">Preguntas</h4>
         <ol id="questions">
           <li id="us-bias-question" class="bias-question">
-            <p>How biased was the text towards or against the United States?</p>
+            <p class="english">How biased was the text towards or against
+              the United States?</p>
+            <p class="spanish">Cual es el sentido de la parcialidad en el
+              texto? Favorable o desfavorable hacia los Estados Unidos?</p>
             <p class="slider"></p>
-            <p class="slider-labels">
+            <p class="slider-labels english">
               <span class="label-1">Very biased against</span>
               <span class="label-2">Moderately biased against</span>
               <span class="label-3">Slightly biased against</span>
@@ -124,11 +173,23 @@
               <span class="label-6">Moderately biased towards</span>
               <span class="label-7">Very biased towards</span>
             </p>
+            <p class="slider-labels spanish">
+              <span class="label-1">Totalmente en contra de la parcialidad</span>
+              <span class="label-2">Moderadamente en contra de la parcialidad</span>
+              <span class="label-3">Ligeramente en contra de la parcialidad</span>
+              <span class="label-4">No existe parcialidad</span>
+              <span class="label-5">Ligeramente parcial</span>
+              <span class="label-6">Moderadamente parcial</span>
+              <span class="label-7">Totalmente parcial</span>
+            </p>
           </li>
           <li id="soviet-bias-question" class="bias-question">
-            <p>How biased was the text towards or against the Soviet Union?</p>
+            <p class="english">How biased was the text towards or against
+              the Soviet Union?</p>
+            <p class="spanish">Cual es el sentido de la parcialidad en el
+              texto? Favorable o desfavorable hacia la Unión Soviética?</p>
             <p class="slider"></p>
-            <p class="slider-labels">
+            <p class="slider-labels english">
               <span class="label-1">Very biased against</span>
               <span class="label-2">Moderately biased against</span>
               <span class="label-3">Slightly biased against</span>
@@ -136,6 +197,15 @@
               <span class="label-5">Slightly biased towards</span>
               <span class="label-6">Moderately biased towards</span>
               <span class="label-7">Very biased towards</span>
+            </p>
+            <p class="slider-labels spanish">
+              <span class="label-1">Totalmente en contra de la parcialidad</span>
+              <span class="label-2">Moderadamente en contra de la parcialidad</span>
+              <span class="label-3">Ligeramente en contra de la parcialidad</span>
+              <span class="label-4">No existe parcialidad</span>
+              <span class="label-5">Ligeramente parcial</span>
+              <span class="label-6">Moderadamente parcial</span>
+              <span class="label-7">Totalmente parcial</span>
             </p>
           </li>
         </ol>
@@ -154,11 +224,35 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
   <!-- Bootstrap JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-  <script src="https://cdn.rawgit.com/swisnl/jQuery-contextMenu/master/dist/jquery.contextMenu.min.js" type="text/javascript"></script>
+  <script src="https://cdn.rawgit.com/swisnl/jQuery-contextMenu/e94aefab380fb9f8d2c34201fdd10119024bb945/dist/jquery.contextMenu.min.js" type="text/javascript"></script>
 
   <script type="text/javascript">
   
 $$(function() {
+  var lang = $$('body').attr('class');
+  var menuItems;
+  if (lang === 'english') {
+    menuItems = {
+      'united-states-t': {name: 'Biased towards the United States'},
+      'united-states-a': {name: 'Biased against the United States'},
+      'soviet-t': {name: 'Biased towards the Soviet Union'},
+      'soviet-a': {name: 'Biased against the Soviet Union'},
+      'sep1': "---------",
+      'sentence': {name: 'Clear annotation'}
+    };
+  } else if (lang === 'spanish') {
+    menuItems = {
+      'united-states-t': {name: 'Parcialidad hacia los Estados Unidos'},
+      'united-states-a': {name: 'Parcialidad contra los Estados Unidos'},
+      'soviet-t': {name: 'Parcialidad hacia la Unión Soviética'},
+      'soviet-a': {name: 'Parcialidad contra la Unión Soviética'},
+      'sep1': "---------",
+      'sentence': {name: 'Elimine la selección'}
+    };
+  }
+  
+  console.log(menuItems);
+  
   $$('.bias-question .slider').slider({
     min: -3, max: 3, step: 1,
     change: function(event, ui) {

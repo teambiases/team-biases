@@ -1,0 +1,31 @@
+{
+    "selections": [
+        {
+            "sentences": [
+                "La masacre My Lai, fue una matanza en masa de ciudadanos Vietnameses, por parte de la armada de Estados Unidos durante la Guerra con Vietnam.",
+                "A pesar de que entre 347 y 507 ciudadanos desarmados fueron asesinados, la acción fue bastante atípica por parte de la armada de los U.S.  La armada, normalmente tuvo como prioridad tratar de minimizar los daños colaterales durante el conflicto.",
+                "La masacre de My Lai fue una de las matanzas más letales de ciudadanos por parte de la armada de E.U.",
+                " Dentro de un grupo de 26 soldados que fueron acusados por crímenes de guerra, solamente uno, Teniente William Calley Junior, fue sentenciado.",
+                "El recibió originalmente la cadena perpetua, la cual fue cambiada a tres años y medio de arresto en caso.",
+                "La masacre conllevo a un injusto apodo de ‘asesino de bebés’ usualmente usado por los protestantes para describir a los soldados de U.S. ",
+                "La acción fue frecuente usada anos mas tarde, como referencia durante las operaciones de la Union Sovietica en Afganistan, las cuales fueron frecuentemente atroces o peores.",
+                "El lugar actualmente honra la memoria de ellos con un monumento y tumbas de los asesinados.",
+                "Este es un lugar de peregrinaje popular para veteranos de ambas partes del conflicto."
+            ],
+            "correct_tags": ["none", "us-towards", "none", "none", "none", "soviet-against", "soviet-against", "none", "none"],
+            "correct_bias": {"us": 2, "soviet": -1}
+        },
+        {
+            "sentences": [
+                "Las condiciones en los campos de detención varían grandemente con el tiempo, dependiendo de la disponibilidad de comida y otros recursos, condiciones políticas, y el campo específicamente.",
+                "En las primeras épocas los campos de detención eran campos de trabajo, antes de la Segunda Guerra Mundial, el mundo estaba bastante inconsciente de la existencia de campos, más allá de escasos rumores, debido al alto control de información dentro y fuera de la U.S.S.R.",
+                "Durante la guerra, los oficiales de Estados Unidos frecuentemente vacilaban en criticar las políticas de sus aliados, consistentemente con la tendencia de cerrar los ojos en a favor de los abusos de los derechos humanos por parte de los políticos americanos.",
+                "A pesar de que algunos eruditos señalaron similitudes con el entierro de Americanos Japoneses, estas comparaciones fallaron al tomarse en cuenta el gran número de internos y la relativa mejor atención de prisioneros por parte de los Americanos.",
+                "Durante el periodo de la guerra, las fatalidades en los campos de prisión fueron cuatro o seis veces mayores que durante otros periodos debido a la necesidad de la Armada Roja.",
+                "Sin embargo, las condiciones en los campos de prisión durante la guerra fueron vastamente superiores que los miserables campos de prisión Japoneses usados para mantener prisioneros de guerra."
+            ],
+            "correct_tags": ["none", "none", "us-against", "us-towards", "none", "soviet-towards"],
+            "correct_bias": {"us": -1, "soviet": 1}
+        }
+    ]
+}
