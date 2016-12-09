@@ -6,8 +6,9 @@ import logging
 import bz2
 import pickle
 
-from biases.wiki.chunks import chunk_article
 from gensim.corpora import wikicorpus
+from biases.wiki.chunks import chunk_article
+from biases.wiki.titles import make_wiki_title
 
 if __name__ == '__main__':
     if len(sys.argv) != 5:
@@ -42,6 +43,7 @@ if __name__ == '__main__':
         with bz2.open(dump_fname, 'rt') as dump_file:
             for title, content, pageid in \
                     wikicorpus.extract_pages(dump_file):
+                title = make_wiki_title(title)
                 if title in corpus:
                     chunks = chunk_article(title, content)
                     chunked_articles[title] = chunks
