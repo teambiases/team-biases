@@ -6,7 +6,7 @@ from biases.utils.config import config
 # information in the repository
 ACCESS_ID = config['AWS']['AccessKey']
 SECRET_KEY = config['AWS']['SecretKey']
-HOST = 'mechanicalturk.sandbox.amazonaws.com'
+HOST = config['AWS']['Host']
  
 mturk_connection = MTurkConnection(aws_access_key_id=ACCESS_ID,
                                    aws_secret_access_key=SECRET_KEY,
