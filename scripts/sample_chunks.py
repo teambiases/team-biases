@@ -44,6 +44,8 @@ if __name__ == '__main__':
                     yn = 'invalid'
                     while yn not in 'yn':
                         yn = input('Is this a valid chunk? (y/n) ')
+                        if yn == '':
+                            yn = 'invalid'
                     if yn == 'y':
                         sampled_chunks.append(chunk)
                     
@@ -57,6 +59,7 @@ if __name__ == '__main__':
                     for chunk in sampled_chunks:
                         sample_file.write('\t'.join(map(str, chunk.id)) +
                                            '\n')
+                    sampled_articles += 1
                 
                 if sampled_articles >= num_articles:
                     break
