@@ -18,7 +18,7 @@ SAMPLE_SEED=dec2016
 SAMPLE_ARTICLES=15
 SAMPLE_CHUNKS=3
 
-LDA_TOPICS=100
+LDA_TOPICS=400
 LDA_PASSES=3
 
 .PRECIOUS: $(DATADIR)/wikipedia/dict/%.dict.pickle
@@ -48,6 +48,7 @@ $(DATADIR)/wikipedia/categories/%.categories.pickle : scripts/extract_categories
 
 # Creating tf-idf matrix market files from corpora and dictionaries
 $(DATADIR)/wikipedia/vector/%.tfidf.mm.bz2 : scripts/build_wiki_vectors.py $(DATADIR)/wikipedia/dump/%-pages-articles.xml.bz2 $(DATADIR)/wikipedia/dict/%.dict.pickle
+	mkdir -p $(dir $@)
 	$(PYTHON) $^ $(patsubst %.bz2,%,$@)
 	bzip2 -f $(patsubst %.bz2,%,$@)
 	
@@ -56,6 +57,7 @@ $(DATADIR)/wikipedia/langlinks/$(TARGETLANG)-$(SPECTRUMLANG1)-$(SPECTRUMLANG2)-$
 	scripts/export_dump_langlinks_csv.py \
 	$(DATADIR)/wikipedia/dump/$(TARGETLANG)wiki-$(DUMPDATE)-langlinks.sql.gz \
 	$(DATADIR)/wikipedia/vector/$(TARGETLANG)wiki-$(DUMPDATE).tfidf.mm.bz2
+	mkdir -p $(dir $@)
 	$(PYTHON) $^ $@ $(TARGETLANG) $(SPECTRUMLANG1) $(SPECTRUMLANG2)
 	
 # Combine matrix market files and sort
@@ -65,6 +67,7 @@ $(DATADIR)/wikipedia/vector/$(COMBINED_ID).parallel.tfidf.mm.bz2 : scripts/paral
 	$(DATADIR)/wikipedia/vector/$(TARGETLANG)wiki-$(DUMPDATE).tfidf.mm.bz2 \
 	$(DATADIR)/wikipedia/vector/$(SPECTRUMLANG1)wiki-$(DUMPDATE).tfidf.mm.bz2 \
 	$(DATADIR)/wikipedia/vector/$(SPECTRUMLANG2)wiki-$(DUMPDATE).tfidf.mm.bz2
+	mkdir -p $(dir $@)
 	$(PYTHON) $^ $@
 	
 # Combine dictionaries
@@ -74,6 +77,7 @@ $(DATADIR)/wikipedia/dict/$(COMBINED_ID).parallel.dict.pickle : scripts/parallel
 	$(DATADIR)/wikipedia/dict/$(TARGETLANG)wiki-$(DUMPDATE).dict.pickle \
 	$(DATADIR)/wikipedia/dict/$(SPECTRUMLANG1)wiki-$(DUMPDATE).dict.pickle \
 	$(DATADIR)/wikipedia/dict/$(SPECTRUMLANG2)wiki-$(DUMPDATE).dict.pickle
+	mkdir -p $(dir $@)
 	$(PYTHON) $^ $@
 	
 # Run LDA over dumps (first rule for when topic number is unspecified)
@@ -81,16 +85,19 @@ $(DATADIR)/wikipedia/dict/$(COMBINED_ID).parallel.dict.pickle : scripts/parallel
 $(DATADIR)/lda/%.lda.pickle : scripts/train_lda.py \
 	$(DATADIR)/wikipedia/vector/%.tfidf.mm.bz2 \
 	$(DATADIR)/wikipedia/dict/%.dict.pickle
+	mkdir -p $(dir $@)
 	$(PYTHON) $^ $@
 
 $(DATADIR)/lda/%.$(LDA_TOPICS)t.lda.pickle : scripts/train_lda.py \
 	$(DATADIR)/wikipedia/vector/%.tfidf.mm.bz2 \
 	$(DATADIR)/wikipedia/dict/%.dict.pickle
+	mkdir -p $(dir $@)
 	$(PYTHON) $^ $@ $(LDA_TOPICS) $(LDA_PASSES)
 	
 # Output LDA topics to CSV
 	
 $(DATADIR)/lda/%.lda.topics.csv : scripts/lda_to_csv.py $(DATADIR)/lda/%.lda.pickle
+	mkdir -p $(dir $@)
 	$(PYTHON) $^ $@
 
 topicmodel: $(DATADIR)/lda/$(COMBINED_ID).parallel.$(LDA_TOPICS)t.lda.pickle \
@@ -103,6 +110,7 @@ $(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).titles.txt : scripts/s
 	$(DATADIR)/wikipedia/vector/$(TARGETLANG)wiki-$(DUMPDATE).tfidf.mm.bz2 \
 	$(DATADIR)/wikipedia/dict/$(TARGETLANG)wiki-$(DUMPDATE).dict.pickle \
 	$(DATADIR)/wikipedia/categories/$(TARGETLANG)wiki-$(DUMPDATE).categories.pickle
+	mkdir -p $(dir $@)
 	$(PYTHON) $^ $@ $(CORPUS_QUERY)
 	
 # Create corpus with topics
@@ -111,6 +119,7 @@ $(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).$(LDA_TOPICS)topics.pi
 	$(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).titles.txt \
 	$(DATADIR)/wikipedia/vector/$(COMBINED_ID).parallel.tfidf.mm.bz2 \
 	$(DATADIR)/lda/$(COMBINED_ID).parallel.$(LDA_TOPICS)t.lda.pickle
+	mkdir -p $(dir $@)
 	$(PYTHON) $^ $@
 	
 # Analyze corpus with topics
@@ -119,6 +128,7 @@ $(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).$(LDA_TOPICS)topics.an
 	scripts/analyze_topics_corpus.py \
 	$(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).$(LDA_TOPICS)topics.pickle \
 	$(DATADIR)/lda/$(COMBINED_ID).parallel.$(LDA_TOPICS)t.lda.pickle
+	mkdir -p $(dir $@)
 	$(PYTHON) $^ $@
 	
 topicscorpus: $(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).$(LDA_TOPICS)topics.pickle \
