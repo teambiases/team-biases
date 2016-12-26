@@ -87,13 +87,13 @@ if __name__ == '__main__':
                 answer_spec = AnswerSpecification(SelectionAnswer(
                         style = 'radiobutton',
                         selections = [
-                            ('Totalmente en contra de la parcialidad', '-3'),
-                            ('Moderadamente en contra de la parcialidad', '-2'),
-                            ('Ligeramente en contra de la parcialidad', '-1'),
+                            ('Totalmente en contra', '-3'),
+                            ('Moderadamente en contra', '-2'),
+                            ('Ligeramente en contra', '-1'),
                             ('No existe parcialidad', '0'),
-                            ('Ligeramente parcial', '1'),
-                            ('Moderadamente parcial', '2'),
-                            ('Totalmente parcial', '3')
+                            ('Ligeramente parcial a favor', '1'),
+                            ('Moderadamente parcial a favor', '2'),
+                            ('Totalmente parcial a favor', '3')
                         ]))
                         
                 bias_question = Question(question_identifier, question_content,
