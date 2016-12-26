@@ -63,7 +63,7 @@
             </h4>
             <h4 class="panel-title spanish">
               Instrucciones <small> <a role="button"
-                data-toggle="collapse" href="#instructions-body"> show/hide</a>
+                data-toggle="collapse" href="#instructions-body"> mostrar/ocultar</a>
               </small>
             </h4>
           </div>
@@ -251,8 +251,6 @@ $$(function() {
     };
   }
   
-  console.log(menuItems);
-  
   $$('.bias-question .slider').slider({
     min: -3, max: 3, step: 1,
     change: function(event, ui) {
@@ -290,14 +288,7 @@ $$(function() {
       // Update hidden form element for sentences
       $$('#sentences-input').val(sentenceAnnotations.join(''));
     },
-    items: {
-      'united-states-t': {name: 'Biased towards the United States'},
-      'united-states-a': {name: 'Biased against the United States'},
-      'soviet-t': {name: 'Biased towards the Soviet Union'},
-      'soviet-a': {name: 'Biased against the Soviet Union'},
-      'sep1': "---------",
-      'sentence': {name: 'Clear annotation'}
-    }
+    items: menuItems
   });
   $$('.sentence a').on('click', function(e) {
     e.preventDefault();
