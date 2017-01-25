@@ -5,6 +5,7 @@ import json
 import time
 import logging
 import csv
+import os
 
 from biases.utils.mturk import mturk_connection
 
@@ -20,9 +21,11 @@ if __name__ == '__main__':
         with open(qual_test_fname, 'r') as qual_test_file:
             qual_test_json = json.load(qual_test_file)
             
-        with open(log_fname, 'w') as log_file:
+        log_already_exists = os.path.isfile(log_fname)
+        with open(log_fname, 'a' if log_already_exists else 'w') as log_file:
             log_csv = csv.writer(log_file)
-            log_headers = ['worker', 'time', 'granted', 'tags-correct']
+            log_headers = ['worker', 'request-id', 'time', 'granted', 
+                           'tags-correct']
             for selection_index, selection in \
                     enumerate(qual_test_json['selections']):
                 for sentence_index in range(len(selection['correct_tags'])):
@@ -31,13 +34,15 @@ if __name__ == '__main__':
                 for endpoint in selection['correct_bias'].keys():
                     log_headers.append('selection-{}-bias-{}'.format(
                             selection_index, endpoint))
-            log_csv.writerow(log_headers)
+            if not log_already_exists:
+                log_csv.writerow(log_headers)
             
             while True:
                 requests = mturk_connection.get_qualification_requests(qual_id)
                 for request in requests:
-                    answers = {answer.qid: answer.fields[0] for answer in
-                               request.answers[0]}
+                    answers = {answer.qid: (answer.fields[0] if
+                               len(answer.fields) > 0 else None)
+                               for answer in request.answers[0]}
                     grant_qualification = True
                     
                     tags_total, tags_correct = 0, 0
@@ -60,11 +65,14 @@ if __name__ == '__main__':
                                                                 endpoint)
                             # Reject qualification if bias score is off by more
                             # than 1
-                            answer_bias = int(answers[qid])
-                            if abs(answer_bias - correct_bias) > 1:
+                            try:
+                                answer_bias = int(answers[qid])
+                                if abs(answer_bias - correct_bias) > 1:
+                                    grant_qualification = False
+                            except TypeError: # If they didn't give an answer
                                 grant_qualification = False
-                            logging.info('%s on %s: answer=%d, correct=%d',
-                                    request.SubjectId, qid, answer_bias,
+                            logging.info('%s on %s: answer=%s, correct=%d',
+                                    request.SubjectId, qid, answers[qid],
                                     correct_bias)
                      
                     logging.info('%s: %d / %d tags correct (%d%%)',
@@ -89,6 +97,7 @@ if __name__ == '__main__':
                         
                     log_info = dict(answers) # Make a copy of answers to log
                     log_info['worker'] = request.SubjectId
+                    log_info['request-id'] = request.QualificationRequestId
                     log_info['time'] = request.SubmitTime
                     log_info['granted'] = grant_qualification
                     log_info['tags-correct'] = tags_correct
@@ -97,3 +106,4 @@ if __name__ == '__main__':
                     log_file.flush()
                         
                 time.sleep(10)
+
