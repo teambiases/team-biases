@@ -1,5 +1,5 @@
 {
     "language": "spanish",
-    "sentences": "$(sentences)",
+    "sentences": "${sentences}",
     "extra_instructions": ""
 }

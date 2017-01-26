@@ -50,8 +50,8 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
 </head>
-<body class="$language" style="padding: 15px 0;">
-  <div class="container-fluid $language">
+<body class="" style="padding: 15px 0;">
+  <div id="bias-survey" class="container-fluid $language" data-language="$language">
     <div class="row">
       <div class="col-md-12">
         <div id="instructions" class="panel panel-primary">
@@ -229,7 +229,7 @@
   <script type="text/javascript">
   
 $$(function() {
-  var lang = $$('body').attr('class');
+  var lang = $$('#bias-survey').attr('data-language');
   var menuItems;
   if (lang === 'english') {
     menuItems = {
