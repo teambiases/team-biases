@@ -31,8 +31,8 @@ The packages and modules in `src-python` are all located under an overarching `b
 This section describes how to build the results from Wikipedia dump files.
 
  1. Make a directory `data/wikipedia/dump` and download the following files into that directory:
-   - From https://dumps.wikimedia.org/enwiki/20160820/, download `enwiki-20160820-pages-articles.xml.bz2`.
-   - From https://dumps.wikimedia.org/ruwiki/20160820/, download `ruwiki-20160820-pages-articles.xml.bz2`.
-   - From https://dumps.wikimedia.org/eswiki/20160820/, download `eswiki-20160820-pages-articles.xml.bz2` and `eswiki-20160820-langlinks.sql.gz`.
+   - From https://dumps.wikimedia.org/enwiki/20170120/, download `enwiki-20170120-pages-articles.xml.bz2`.
+   - From https://dumps.wikimedia.org/ruwiki/20170120/, download `ruwiki-20170120-pages-articles.xml.bz2`.
+   - From https://dumps.wikimedia.org/eswiki/20170120/, download `eswiki-20170120-pages-articles.xml.bz2` and `eswiki-20170120-langlinks.sql.gz`.
  2. From the `team-biases` directory, run `make topicscorpus`. This will probably take ~24 hours to run.
- 3. Run `python3 scripts/topics_demo.py data/wikipedia/corpus/coldwar.es-en-ru-wiki-20160820.400topics.pickle`. If everything worked, a web page should pop up where you can inspect the topic distributions of various articles!
+ 3. Run `python3 scripts/topics_demo.py data/wikipedia/corpus/coldwar.es-en-ru-wiki-20170120.400topics.pickle`. If everything worked, a web page should pop up where you can inspect the topic distributions of various articles!
