@@ -1,6 +1,5 @@
 """MySQL-related utility functions."""
 
-import MySQLdb as mysql
 import getpass
 import re
 import ast
@@ -21,6 +20,8 @@ def connect_with_prompt(user_hostname, charset = 'utf8', **connect_params):
     """Given a user/hostname combination in the form user@hostname, prompts
     for a password and then returns a connection to the given MySQL server."""
     
+    import MySQLdb as mysql
+
     user, hostname = user_hostname.split('@')
     password = getpass.getpass('Password for {}: '.format(user_hostname))
     
