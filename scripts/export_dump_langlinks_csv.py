@@ -2,6 +2,7 @@ import _path_config
 
 import sys, os, pickle, csv, logging
 from biases.wiki.langlinks import read_langlinks_from_dump
+from biases.wiki.titles import make_wiki_title
 
 if __name__ == '__main__':
     if len(sys.argv) < 5:
@@ -34,6 +35,7 @@ if __name__ == '__main__':
             for article_id, article_title in metadata.values():
                 article_id = int(article_id)
                 if article_id in langlinks:
-                    row = [article_title]
-                    row += [title or '' for title in langlinks[article_id]]
+                    row = [make_wiki_title(article_title)]
+                    row += [make_wiki_title(title) if title else '' for title
+                            in langlinks[article_id]]
                     out.writerow(row)
