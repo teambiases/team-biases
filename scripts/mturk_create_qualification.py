@@ -22,14 +22,14 @@ if __name__ == '__main__':
         overview.append(SimpleField('Text',
                 '''Hola, Muchas gracias por dedicar tu tiempo y participar en \
                 esta encuesta. La encuesta busca detectar y entender la \
-                tendencia de la parcialidad en una frase o oración en español.\
-                Para el propósito de esta encuesta, parcialidad tiene la \
-                definición de existencia de  imbalance, lo que conlleva a \
-                sugerir la existencia de preferencia o preconcepción. Se
-                requiere que Ud. remarque la parcialidad en dos frases cortas.
-
-                Para poder aprobar en esta calificación, Ud. deberá completar \
-                el siguiente test con una exactitud de 80 %.'''))
+                preferencia o inclinacion hacia uno de dos paises (los Estados Unidos 
+				o la Union Sovietica) en una frase o oración en español.\
+                Para el propósito de esta encuesta, esta 'inclinacion' tiene la \
+                definición de existencia de  imbalance, lo que sugiere \
+				 la existencia de preferencia o preconcepción. Se \
+                requiere que usted remarque la preferencia en dos frases cortas. \
+                Para poder aprobar en esta calificación, usted deberá completar \
+                la siguiente prueba con una exactitud de 80 %.'''))
         qual_test.append(overview)
         
         for selection_index, selection in \
@@ -42,11 +42,10 @@ if __name__ == '__main__':
             selection_overview.append(SimpleField('Text',
                     ' '.join(selection['sentences'])))
             selection_overview.append(SimpleField('Text',
-                    '''Marcar que frases muestran parcialidad. Por cada \
-                    sentencia, decidir si la parcialidad es hacia los \
-                    Estados Unidos or hacia la Unión Soviética, o si no \
-                    existe parcialidad. Cabe resaltar que muchas de las \
-                    frases no demuestran parcialidad.'''))
+                    '''Para cada oracion, decidir si la inclinacion o preferencia \
+                    existe hacia los Estados Unidos, hacia la Unión Soviética, o si no \
+				    existe ninguna inclinacion.\ 
+				    Cabe resaltar que muchas de las frases no demuestran parcialidad.'''))
             qual_test.append(selection_overview)
             
             for sentence_index, sentence in enumerate(selection['sentences']):
@@ -57,11 +56,11 @@ if __name__ == '__main__':
                 answer_spec = AnswerSpecification(SelectionAnswer(
                         style = 'radiobutton',
                         selections = [
-                            ('No Parcialidad', 'none'),
-                            ('Parcialidad hacia los Estados Unidos', 'us-towards'),
-                            ('Parcialidad contra los Estados Unidoss', 'us-against'),
-                            ('Parcialidad hacia la Unión Soviética', 'soviet-towards'),
-                            ('Parcialidad contra la Unión Soviética', 'soviet-against'),
+                            ('No existe preferencia', 'none'),
+                            ('Preferencia hacia los Estados Unidos', 'us-towards'),
+                            ('Preferencia contra los Estados Unidoss', 'us-against'),
+                            ('Preferencia hacia la Unión Soviética', 'soviet-towards'),
+                            ('Preferencia contra la Unión Soviética', 'soviet-against'),
                         ]))
                         
                 sentence_question = Question(question_identifier,
@@ -72,7 +71,7 @@ if __name__ == '__main__':
             bias_overview = Overview()
             bias_overview.append(SimpleField('Text',
                     '''Contestar las dos preguntas siguientes acerca de la \
-                    parcialidad en general en el texto. (Todas las frases)'''))
+                    inclinacion en general en el texto. (Todas las frases)'''))
             qual_test.append(bias_overview)
             
             for country_id, country_name in [('us', 'los Estados Unidos'),
@@ -81,19 +80,19 @@ if __name__ == '__main__':
                         .format(selection_index, country_id)
                 question_content = QuestionContent()
                 question_content.append(SimpleField('Text',
-                        'Cual es el sentido de la parcialidad en el texto? '
+                        'Cual es el sentido de la inclinacion en el texto? '
                         + 'Favorable o desfavorable hacia {}?'
                         .format(country_name)))
                 answer_spec = AnswerSpecification(SelectionAnswer(
                         style = 'radiobutton',
                         selections = [
-                            ('Totalmente en contra', '-3'),
-                            ('Moderadamente en contra', '-2'),
-                            ('Ligeramente en contra', '-1'),
-                            ('No existe parcialidad', '0'),
-                            ('Ligeramente parcial a favor', '1'),
-                            ('Moderadamente parcial a favor', '2'),
-                            ('Totalmente parcial a favor', '3')
+                            ('Totalmente en contra de los Estados Unidos', '-3'),
+                            ('Moderadamente en contra de los Estados Unidos', '-2'),
+                            ('Ligeramente en contra de los Estados Unidos', '-1'),
+                            ('No existe inclinacion', '0'),
+                            ('Ligeramente parcial hacia los Estados Unidos', '1'),
+                            ('Moderadamente parcial a favor de los Estados Unidos', '2'),
+                            ('Totalmente parcial a favorde los Estados Unidos', '3')
                         ]))
                         
                 bias_question = Question(question_identifier, question_content,
@@ -101,7 +100,7 @@ if __name__ == '__main__':
                 qual_test.append(bias_question)
         
         mturk_connection.create_qualification_type(qual_name,
-                '''Capaz de leer y entender parcialidad en espanol.''',
+                '''Capaz de leer y entender tendencia en espanol.''',
                 status = 'Active',
                 keywords = ['Spanish', 'bias', 'Espa\xf1ol', 'tag'],
                 test = qual_test,
