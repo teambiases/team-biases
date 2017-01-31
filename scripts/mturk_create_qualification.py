@@ -26,7 +26,7 @@ if __name__ == '__main__':
 				o la Union Sovietica) en una frase o oración en español.\
                 Para el propósito de esta encuesta, esta 'inclinacion' tiene la \
                 definición de existencia de  imbalance, lo que sugiere \
-				 la existencia de preferencia o preconcepción. Se \
+				la existencia de preferencia o preconcepción. Se \
                 requiere que usted remarque la preferencia en dos frases cortas. \
                 Para poder aprobar en esta calificación, usted deberá completar \
                 la siguiente prueba con una exactitud de 80 %.'''))
@@ -86,13 +86,16 @@ if __name__ == '__main__':
                 answer_spec = AnswerSpecification(SelectionAnswer(
                         style = 'radiobutton',
                         selections = [
-                            ('Totalmente en contra de los Estados Unidos', '-3'),
-                            ('Moderadamente en contra de los Estados Unidos', '-2'),
-                            ('Ligeramente en contra de los Estados Unidos', '-1'),
+                            ('Totalmente en contra de ' + country_name, '-3'),
+                            ('Moderadamente en contra de ' + country_name,
+                             '-2'),
+                            ('Ligeramente en contra de ' + country_name, '-1'),
                             ('No existe inclinacion', '0'),
-                            ('Ligeramente parcial hacia los Estados Unidos', '1'),
-                            ('Moderadamente parcial a favor de los Estados Unidos', '2'),
-                            ('Totalmente parcial a favorde los Estados Unidos', '3')
+                            ('Ligeramente parcial hacia ' + country_name, '1'),
+                            ('Moderadamente parcial a favor de ' + country_name,
+                             '2'),
+                            ('Totalmente parcial a favorde ' + country_name,
+                             '3')
                         ]))
                         
                 bias_question = Question(question_identifier, question_content,
