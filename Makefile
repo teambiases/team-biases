@@ -164,3 +164,9 @@ mturktasks: $(DATADIR)/wikipedia/mturk/$(CORPUS_NAME).$(COMBINED_ID).$(SAMPLE_SE
 
 web/mturk-wiki-bias/%.html : scripts/render_template.py web/mturk-wiki-bias/base.html web/mturk-wiki-bias/%.json
 	$(PYTHON) $^ $@
+
+# Analyze interannotator agreement
+
+$(DATADIR)/wikipedia/mturk/%.results.agreement.txt : scripts/annotator_agreement.py \
+	$(DATADIR)/wikipedia/mturk/%.results.csv
+	$(PYTHON) $^ $@
