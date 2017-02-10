@@ -170,3 +170,10 @@ web/mturk-wiki-bias/%.html : scripts/render_template.py web/mturk-wiki-bias/base
 $(DATADIR)/wikipedia/mturk/%.results.agreement.txt : scripts/annotator_agreement.py \
 	$(DATADIR)/wikipedia/mturk/%.results.csv
 	$(PYTHON) $^ $@
+	
+# Convert mechanical turk results to bias scores
+
+$(DATADIR)/wikipedia/bias/%.mturk.scores.csv : scripts/mturk_results_to_scores.py \
+	$(DATADIR)/wikipedia/mturk/%.results.csv
+	mkdir -p $(dir $@)
+	$(PYTHON) $^ $@
