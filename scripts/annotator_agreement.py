@@ -62,6 +62,8 @@ if __name__ == '__main__':
                                         '_bias']) for row in rows])
                 out_file.write('Mean standard deviation: {:0.2f}\n'
                         .format(np.mean(list(map(np.std, bias_scores)))))
+                out_file.write('Interannotator agreement: {:0.3f}\n'
+                        .format(average_agreement(bias_scores)))
                 
                 out_file.write('=== Distribution ===\n')
                 score_counts = Counter(itertools.chain(*bias_scores))
