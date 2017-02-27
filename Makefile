@@ -183,8 +183,9 @@ $(DATADIR)/wikipedia/bias/%.mturk.scores.csv : scripts/mturk_results_to_scores.p
 	
 # Train Gentzkow & Shapiro models
 
-$(DATADIR)/gs/%.$(ENDPOINT0)-$(ENDPOINT1).gs.pickle : scripts/train_gentzkow_shapiro.py \
+$(DATADIR)/gs/%.$(ENDPOINT0)-$(ENDPOINT1).gs.csv: scripts/train_gentzkow_shapiro.py \
 	$(DATADIR)/endpoints/%.$(ENDPOINT0).txt \
-	$(DATADIR)/endpoints/%.$(ENDPOINT1).txt
+	$(DATADIR)/endpoints/%.$(ENDPOINT1).txt \
+    $(DATADIR)/gs/$(ENDPOINT0)-$(ENDPOINT1).gs.csv
 	mkdir -p $(dir $@)
 	$(PYTHON) $^ $@
