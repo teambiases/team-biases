@@ -83,6 +83,13 @@ $(DATADIR)/wikipedia/dict/$(COMBINED_ID).parallel.dict.pickle : scripts/parallel
 	mkdir -p $(dir $@)
 	$(PYTHON) $^ $@
 	
+# Filter matrix market files given a list of titles
+
+$(DATADIR)/wikipedia/vector/$(CORPUS_NAME).$(COMBINED_ID).parallel.tfidf.mm.bz2 : scripts/filter_wiki_vectors.py \
+	$(DATADIR)/wikipedia/vector/$(COMBINED_ID).parallel.tfidf.mm.bz2 \
+	$(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).titles.txt
+	$(PYTHON) $^ $@
+	
 # Run LDA over dumps (first rule for when topic number is unspecified)
 
 $(DATADIR)/lda/%.lda.pickle : scripts/train_lda.py \
@@ -97,6 +104,12 @@ $(DATADIR)/lda/%.$(LDA_TOPICS)t.lda.pickle : scripts/train_lda.py \
 	mkdir -p $(dir $@)
 	$(PYTHON) $^ $@ $(LDA_TOPICS) $(LDA_PASSES)
 	
+$(DATADIR)/lda/$(CORPUS_NAME).%.$(LDA_TOPICS)t.lda.pickle : scripts/train_lda.py \
+	$(DATADIR)/wikipedia/vector/$(CORPUS_NAME).%.tfidf.mm.bz2 \
+	$(DATADIR)/wikipedia/dict/%.dict.pickle
+	mkdir -p $(dir $@)
+	$(PYTHON) $^ $@ $(LDA_TOPICS) 10
+	
 # Output LDA topics to CSV
 	
 $(DATADIR)/lda/%.lda.topics.csv : scripts/lda_to_csv.py $(DATADIR)/lda/%.lda.pickle
@@ -104,7 +117,9 @@ $(DATADIR)/lda/%.lda.topics.csv : scripts/lda_to_csv.py $(DATADIR)/lda/%.lda.pic
 	$(PYTHON) $^ $@
 
 topicmodel: $(DATADIR)/lda/$(COMBINED_ID).parallel.$(LDA_TOPICS)t.lda.pickle \
-	$(DATADIR)/lda/$(COMBINED_ID).parallel.$(LDA_TOPICS)t.lda.topics.csv
+	$(DATADIR)/lda/$(COMBINED_ID).parallel.$(LDA_TOPICS)t.lda.topics.csv \
+	$(DATADIR)/lda/$(CORPUS_NAME).$(COMBINED_ID).parallel.$(LDA_TOPICS)t.lda.pickle \
+	$(DATADIR)/lda/$(CORPUS_NAME).$(COMBINED_ID).parallel.$(LDA_TOPICS)t.lda.topics.csv
 	
 # Create corpus through text search
 
