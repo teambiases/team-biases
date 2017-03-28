@@ -53,7 +53,6 @@ class CachedTranslationClient(object):
                 query_index_map[query_index] = index
                 query_index += 1
         
-        print(query_values)
         if len(query_values) > 0:
             query_results = self.client.translate(query_values,
                     target_language=target_language,
