@@ -33,8 +33,11 @@ if __name__ == '__main__':
             langlinks_csv = csv.reader(langlinks_file)
             langs = next(langlinks_csv)
             langlinks_articles = {row[0] for row in langlinks_csv}
-        corpus = corpus & langlinks_articles
-        
+        # If titles are likely in the same language then use them all,
+        # otherwise filter by number with langlinks
+        if len(corpus & langlinks_articles) > 0.5 * len(corpus):
+            corpus = corpus & langlinks_articles
+                   
         logging.info('loaded corpus with %d articles (%d with langlinks)',
                      corpus_size, len(corpus))
         

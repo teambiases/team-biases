@@ -14,8 +14,8 @@ COMBINED_ID=$(TARGETLANG)-$(SPECTRUMLANG0)-$(SPECTRUMLANG1)-wiki-$(DUMPDATE)
 CORPUS_QUERY="categories_in(['Categoría:Guerra_Fría', 'Categoría:Alemania_Occidental', 'Categoría:Unión_Soviética', 'Categoría:Cultura_de_la_Unión_Soviética', 'Categoría:Terminología_soviética', 'Categoría:Símbolos_de_la_Unión_Soviética', 'Categoría:Arte_de_la_Unión_Soviética', 'Categoría:Realismo_socialista', 'Categoría:Historia_de_la_Unión_Soviética', 'Categoría:Represión_política_en_la_Unión_Soviética', 'Categoría:Gulag', 'Categoría:Gran_Purga', 'Categoría:Relaciones_internacionales_de_la_Unión_Soviética', 'Categoría:Relaciones_bilaterales_de_la_Unión_Soviética', 'Categoría:Relaciones_Turquía-Unión_Soviética', 'Categoría:Relaciones_Checoslovaquia-Unión_Soviética', 'Categoría:Relaciones_Hungría-Unión_Soviética', 'Categoría:Relaciones_India-Unión_Soviética', 'Categoría:Relaciones_Reino_Unido-Unión_Soviética', 'Categoría:Relaciones_Mongolia-Unión_Soviética', 'Categoría:Relaciones_Irán-Unión_Soviética', 'Categoría:Relaciones_Francia-Unión_Soviética', 'Categoría:Relaciones_México-Unión_Soviética', 'Categoría:Relaciones_Alemania-Unión_Soviética', 'Categoría:Relaciones_Unión_Soviética-Uruguay', 'Categoría:Relaciones_Unión_Soviética-Vietnam', 'Categoría:Relaciones_Suiza-Unión_Soviética', 'Categoría:Relaciones_Polonia-Unión_Soviética', 'Categoría:Relaciones_China-Unión_Soviética', 'Categoría:Relaciones_Bulgaria-Unión_Soviética', 'Categoría:Relaciones_Estados_Unidos-Unión_Soviética', 'Categoría:Relaciones_Cuba-Unión_Soviética', 'Categoría:Relaciones_España-Unión_Soviética', 'Categoría:Relaciones_Rumania-Unión_Soviética', 'Categoría:Ocupaciones_militares_de_la_Unión_Soviética', 'Categoría:Espías_de_la_Unión_Soviética', 'Categoría:Guerras_de_la_Unión_Soviética', 'Categoría:Resoluciones_del_Consejo_de_Seguridad_de_las_Naciones_Unidas_referentes_a_la_Unión_Soviética', 'Categoría:Símbolos_de_la_Unión_Soviética', 'Categoría:Propaganda_de_la_Unión_Soviética', 'Categoría:Resoluciones_del_Consejo_de_Seguridad_de_las_Naciones_Unidas_referentes_a_la_Unión_Soviética', 'Categoría:KGB', 'Categoría:Disolución_de_la_Unión_Soviética', 'Categoría:Tratados_de_la_Unión_Soviética', 'Categoría:Símbolos_de_la_Unión_Soviética', 'Categoría:Política_de_la_Unión_Soviética', 'Categoría:Partido_Comunista_de_la_Unión_Soviética', 'Categoría:KGB', 'Categoría:NKVD', 'Categoría:Represión_política_en_la_Unión_Soviética', 'Categoría:Relaciones_internacionales_de_la_Unión_Soviética', 'Categoría:Propaganda_de_la_Unión_Soviética', 'Categoría:Tratados_de_la_Unión_Soviética', 'Categoría:Unión_de_Partidos_Comunistas', 'Categoría:Políticos_de_la_Unión_Soviética', 'Categoría:Derecho_de_la_Unión_Soviética', 'Categoría:Tratados_de_la_Unión_Soviética', 'Categoría:Constituciones_de_la_Unión_Soviética', 'Categoría:Represión_política_en_la_Unión_Soviética', 'Categoría:Derechos_humanos_en_la_Unión_Soviética', 'Categoría:Sociedad_de_la_Unión_Soviética', 'Categoría:Cultura_de_la_Unión_Soviética', 'Categoría:Derechos_humanos_en_la_Unión_Soviética', 'Categoría:Soviéticos', 'Categoría:Diáspora_soviética', 'Categoría:Emigrantes_de_la_Unión_Soviética', 'Categoría:Ejecutados_de_la_Unión_Soviética', 'Categoría:Economía_de_la_Unión_Soviética', 'Categoría:Primavera_de_Praga', 'Categoría:Operación_Cóndor', 'Categoría:Terrorismo_de_Estado_en_Argentina_en_las_décadas_de_1970_y_1980', 'Categoría:Escuela_de_las_Américas', 'Categoría:Conflictos_de_la_Guerra_Fría', 'Categoría:Historia_de_Estados_Unidos_(1945-1989)', 'Categoría:Zona_de_ocupación_estadounidense', 'Categoría:Intervenciones_militares_de_Cuba', 'Categoría:Revolución_Sandinista', 'Categoría:Conferencias_de_la_Segunda_Guerra_Mundial', 'Categoría:Revoluciones_de_1989', 'Categoría:Muro_de_Berlín', 'Categoría:Anticomunismo', 'Categoría:Revoluciones_de_1989', 'Categoría:Propaganda_anticomunista', 'Categoría:Espías_de_la_Guerra_Fría', 'Categoría:Directores_del_KGB', 'Categoría:Operaciones_de_la_KGB', 'Categoría:Agentes_del_KGB', 'Categoría:Bloque_del_Este', 'Categoría:Primavera_de_Praga']) > 0"
 CORPUS_NAME=coldwar
 
-ENDPOINT0=dem
-ENDPOINT1=rep
+ENDPOINT0=en
+ENDPOINT1=ru
 
 SAMPLE_SEED=dec2016
 SAMPLE_ARTICLES=15
@@ -87,7 +87,7 @@ $(DATADIR)/wikipedia/dict/$(COMBINED_ID).parallel.dict.pickle : scripts/parallel
 
 $(DATADIR)/wikipedia/vector/$(CORPUS_NAME).$(COMBINED_ID).parallel.tfidf.mm.bz2 : scripts/filter_wiki_vectors.py \
 	$(DATADIR)/wikipedia/vector/$(COMBINED_ID).parallel.tfidf.mm.bz2 \
-	$(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).titles.txt
+	$(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).titles.$(TARGETLANG).txt
 	$(PYTHON) $^ $@
 	
 # Run LDA over dumps (first rule for when topic number is unspecified)
@@ -123,7 +123,7 @@ topicmodel: $(DATADIR)/lda/$(COMBINED_ID).parallel.$(LDA_TOPICS)t.lda.pickle \
 	
 # Create corpus through text search
 
-$(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).titles.txt : scripts/search_dump.py \
+$(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).titles.$(TARGETLANG).txt : scripts/search_dump.py \
 	$(DATADIR)/wikipedia/dump/$(TARGETLANG)wiki-$(DUMPDATE)-pages-articles.xml.bz2 \
 	$(DATADIR)/wikipedia/vector/$(TARGETLANG)wiki-$(DUMPDATE).tfidf.mm.bz2 \
 	$(DATADIR)/wikipedia/dict/$(TARGETLANG)wiki-$(DUMPDATE).dict.pickle \
@@ -131,10 +131,17 @@ $(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).titles.txt : scripts/s
 	mkdir -p $(dir $@)
 	$(PYTHON) $^ $@ $(CORPUS_QUERY)
 	
+# Translate corpus into other language Wikipedias using langlinks
+
+$(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).titles.%.txt : scripts/translate_corpus_titles.py \
+	$(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).titles.$(TARGETLANG).txt \
+	$(DATADIR)/wikipedia/langlinks/$(TARGETLANG)-$(SPECTRUMLANG0)-$(SPECTRUMLANG1)-$(DUMPDATE).langlinks.csv
+	$(PYTHON) $^ $* $@
+	
 # Create corpus with topics
 
 $(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).$(LDA_TOPICS)topics.pickle : scripts/build_topics_corpus.py \
-	$(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).titles.txt \
+	$(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).titles.$(TARGETLANG).txt \
 	$(DATADIR)/wikipedia/vector/$(COMBINED_ID).parallel.tfidf.mm.bz2 \
 	$(DATADIR)/lda/$(COMBINED_ID).parallel.$(LDA_TOPICS)t.lda.pickle
 	mkdir -p $(dir $@)
@@ -154,9 +161,9 @@ topicscorpus: $(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).$(LDA_TO
 
 # Split corpus into chunks
 
-$(DATADIR)/wikipedia/chunks/$(CORPUS_NAME).$(COMBINED_ID).chunks.pickle : scripts/split_chunks.py \
-	$(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).titles.txt \
-	$(DATADIR)/wikipedia/dump/$(TARGETLANG)wiki-$(DUMPDATE)-pages-articles.xml.bz2 \
+$(DATADIR)/wikipedia/chunks/$(CORPUS_NAME).$(COMBINED_ID).chunks.%.pickle : scripts/split_chunks.py \
+	$(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).titles.%.txt \
+	$(DATADIR)/wikipedia/dump/%wiki-$(DUMPDATE)-pages-articles.xml.bz2 \
 	$(DATADIR)/wikipedia/langlinks/$(TARGETLANG)-$(SPECTRUMLANG0)-$(SPECTRUMLANG1)-$(DUMPDATE).langlinks.csv
 	mkdir -p $(dir $@)
 	$(PYTHON) $^ $@
@@ -164,7 +171,7 @@ $(DATADIR)/wikipedia/chunks/$(CORPUS_NAME).$(COMBINED_ID).chunks.pickle : script
 # Sample chunks
 
 $(DATADIR)/wikipedia/chunks/$(CORPUS_NAME).$(COMBINED_ID).chunks.$(SAMPLE_SEED).sample.txt : scripts/sample_chunks.py \
-	$(DATADIR)/wikipedia/chunks/$(CORPUS_NAME).$(COMBINED_ID).chunks.pickle
+	$(DATADIR)/wikipedia/chunks/$(CORPUS_NAME).$(COMBINED_ID).chunks.$(TARGETLANG).pickle
 	mkdir -p $(dir $@)
 	$(PYTHON) $^ $@ $(SAMPLE_ARTICLES) $(SAMPLE_CHUNKS) $(SAMPLE_SEED)
 	
@@ -172,7 +179,7 @@ $(DATADIR)/wikipedia/chunks/$(CORPUS_NAME).$(COMBINED_ID).chunks.$(SAMPLE_SEED).
 
 $(DATADIR)/wikipedia/mturk/$(CORPUS_NAME).$(COMBINED_ID).$(SAMPLE_SEED).tasks.csv : scripts/sample_to_mturk_tasks.py \
 	$(DATADIR)/wikipedia/chunks/$(CORPUS_NAME).$(COMBINED_ID).chunks.$(SAMPLE_SEED).sample.txt \
-	$(DATADIR)/wikipedia/chunks/$(CORPUS_NAME).$(COMBINED_ID).chunks.pickle
+	$(DATADIR)/wikipedia/chunks/$(CORPUS_NAME).$(COMBINED_ID).chunks.$(TARGETLANG).pickle
 	mkdir -p $(dir $@)
 	$(PYTHON) $^ $@
 	
@@ -196,11 +203,16 @@ $(DATADIR)/wikipedia/bias/%.mturk.scores.csv : scripts/mturk_results_to_scores.p
 	mkdir -p $(dir $@)
 	$(PYTHON) $^ $@
 	
+# Extract Wikipedia endpoints
+
+$(DATADIR)/endpoints/$(CORPUS_NAME).wiki-$(DUMPDATE).%.txt : scripts/create_wiki_endpoint.py \
+	$(DATADIR)/wikipedia/chunks/$(CORPUS_NAME).$(COMBINED_ID).chunks.%.pickle
+	$(PYTHON) $^ $@
+	
 # Train Gentzkow & Shapiro models
 
 $(DATADIR)/gs/%.$(ENDPOINT0)-$(ENDPOINT1).gs.csv: scripts/train_gentzkow_shapiro.py \
 	$(DATADIR)/endpoints/%.$(ENDPOINT0).txt \
-	$(DATADIR)/endpoints/%.$(ENDPOINT1).txt \
-    $(DATADIR)/gs/$(ENDPOINT0)-$(ENDPOINT1).gs.csv
+	$(DATADIR)/endpoints/%.$(ENDPOINT1).txt
 	mkdir -p $(dir $@)
 	$(PYTHON) $^ $@

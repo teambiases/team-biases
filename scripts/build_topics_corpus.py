@@ -4,7 +4,7 @@ import sys, logging, pickle
 import numpy as np
 
 from gensim.models import LdaModel
-from gensim.models.ldamodel import get_random_state
+#from gensim.models.ldamodel import get_random_state
 from gensim.corpora import MmCorpus
 
 from biases.utils.math import sparse2dense
@@ -27,8 +27,8 @@ if __name__ == '__main__':
             logging.info('Loaded %d titles in corpus', len(titles_set))
             
         lda_model = LdaModel.load(lda_fname)
-        if not hasattr(lda_model, 'random_state'):
-            lda_model.random_state = get_random_state(None)
+        #if not hasattr(lda_model, 'random_state'):
+        #    lda_model.random_state = get_random_state(None)
         freq_dict = lda_model.id2word
         langs = []
         id2lang = {}
