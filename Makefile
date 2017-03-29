@@ -17,7 +17,7 @@ CORPUS_NAME=coldwar
 ENDPOINT0=en
 ENDPOINT1=ru
 
-SAMPLE_SEED=dec2016
+SAMPLE_SEED=mar2017
 SAMPLE_ARTICLES=15
 SAMPLE_CHUNKS=3
 
@@ -178,7 +178,7 @@ $(DATADIR)/wikipedia/chunks/$(CORPUS_NAME).$(COMBINED_ID).chunks.%.pickle : scri
 $(DATADIR)/wikipedia/chunks/$(CORPUS_NAME).$(COMBINED_ID).chunks.$(SAMPLE_SEED).sample.txt : scripts/sample_chunks.py \
 	$(DATADIR)/wikipedia/chunks/$(CORPUS_NAME).$(COMBINED_ID).chunks.$(TARGETLANG).pickle
 	mkdir -p $(dir $@)
-	$(PYTHON) $^ $@ $(SAMPLE_ARTICLES) $(SAMPLE_CHUNKS) $(SAMPLE_SEED)
+	$(PYTHON) $^ $@ $(SAMPLE_ARTICLES) $(SAMPLE_CHUNKS) $(SAMPLE_SEED) $(wildcard $(DATADIR)/wikipedia/chunks/$(CORPUS_NAME).$(COMBINED_ID).chunks.*.sample.txt)
 	
 # Output mechanical turk tasks
 
