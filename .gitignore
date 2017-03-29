@@ -8,5 +8,11 @@ __pycache__
 
 **/*.class
 
+# Configuration
 config.ini
+/config
+
+# Data and libraries
+/data
+/lib
 
