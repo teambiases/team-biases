@@ -21,7 +21,7 @@ SAMPLE_SEED=dec2016
 SAMPLE_ARTICLES=15
 SAMPLE_CHUNKS=3
 
-LDA_TOPICS=400
+LDA_TOPICS=100
 LDA_PASSES=3
 
 .PRECIOUS: $(DATADIR)/wikipedia/dict/%.dict.pickle
@@ -55,6 +55,11 @@ $(DATADIR)/wikipedia/vector/%.tfidf.mm.bz2 : scripts/build_wiki_vectors.py $(DAT
 	$(PYTHON) $^ $(patsubst %.bz2,%,$@)
 	bzip2 -f $(patsubst %.bz2,%,$@)
 	
+$(DATADIR)/wikipedia/vector/%.bow.mm.bz2 : scripts/build_wiki_vectors.py $(DATADIR)/wikipedia/dump/%-pages-articles.xml.bz2 $(DATADIR)/wikipedia/dict/%.dict.pickle
+	mkdir -p $(dir $@)
+	$(PYTHON) $^ $(patsubst %.bz2,%,$@) bow
+	bzip2 -f $(patsubst %.bz2,%,$@)
+	
 # Extract langlinks
 $(DATADIR)/wikipedia/langlinks/$(TARGETLANG)-$(SPECTRUMLANG0)-$(SPECTRUMLANG1)-$(DUMPDATE).langlinks.csv : \
 	scripts/export_dump_langlinks_csv.py \
@@ -65,11 +70,11 @@ $(DATADIR)/wikipedia/langlinks/$(TARGETLANG)-$(SPECTRUMLANG0)-$(SPECTRUMLANG1)-$
 	
 # Combine matrix market files and sort
 
-$(DATADIR)/wikipedia/vector/$(COMBINED_ID).parallel.tfidf.mm.bz2 : scripts/parallelize_wiki_vectors.py \
+$(DATADIR)/wikipedia/vector/$(COMBINED_ID).parallel.%.mm.bz2 : scripts/parallelize_wiki_vectors.py \
 	$(DATADIR)/wikipedia/langlinks/$(TARGETLANG)-$(SPECTRUMLANG0)-$(SPECTRUMLANG1)-$(DUMPDATE).langlinks.csv \
-	$(DATADIR)/wikipedia/vector/$(TARGETLANG)wiki-$(DUMPDATE).tfidf.mm.bz2 \
-	$(DATADIR)/wikipedia/vector/$(SPECTRUMLANG0)wiki-$(DUMPDATE).tfidf.mm.bz2 \
-	$(DATADIR)/wikipedia/vector/$(SPECTRUMLANG1)wiki-$(DUMPDATE).tfidf.mm.bz2
+	$(DATADIR)/wikipedia/vector/$(TARGETLANG)wiki-$(DUMPDATE).%.mm.bz2 \
+	$(DATADIR)/wikipedia/vector/$(SPECTRUMLANG0)wiki-$(DUMPDATE).%.mm.bz2 \
+	$(DATADIR)/wikipedia/vector/$(SPECTRUMLANG1)wiki-$(DUMPDATE).%.mm.bz2
 	mkdir -p $(dir $@)
 	$(PYTHON) $^ $@
 	
@@ -104,11 +109,11 @@ $(DATADIR)/lda/%.$(LDA_TOPICS)t.lda.pickle : scripts/train_lda.py \
 	mkdir -p $(dir $@)
 	$(PYTHON) $^ $@ $(LDA_TOPICS) $(LDA_PASSES)
 	
-$(DATADIR)/lda/$(CORPUS_NAME).%.$(LDA_TOPICS)t.lda.pickle : scripts/train_lda.py \
-	$(DATADIR)/wikipedia/vector/$(CORPUS_NAME).%.tfidf.mm.bz2 \
+$(DATADIR)/lda/$(CORPUS_NAME).%.$(LDA_TOPICS)t.ldamallet.pickle : scripts/train_lda_mallet.py \
+	$(DATADIR)/wikipedia/vector/$(CORPUS_NAME).%.bow.mm.bz2 \
 	$(DATADIR)/wikipedia/dict/%.dict.pickle
 	mkdir -p $(dir $@)
-	$(PYTHON) $^ $@ $(LDA_TOPICS) 10
+	$(PYTHON) $^ $@ $(LDA_TOPICS)
 	
 # Output LDA topics to CSV
 	

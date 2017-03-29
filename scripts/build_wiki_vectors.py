@@ -8,23 +8,26 @@ from gensim.models.tfidfmodel import TfidfModel
 from gensim.corpora.mmcorpus import MmCorpus
 
 if __name__ == '__main__':
-    if len(sys.argv) not in range(3, 5):
-        print('Usage: python3 build_wiki_dict wiki-pages-articles.xml.bz2 dict.pickle vectors.mm')
-        print('Build tf-idf vectors of all documents in the given Wikipedia dump using the')
-        print('given dictionary for idf values. Stores the result in matrix market format.')
+    if len(sys.argv) not in range(4, 6):
+        print('Usage: python3 build_wiki_vectors.py wiki-pages-articles.xml.bz2 dict.pickle vectors.mm (vectorformat)')
+        print('Build  vectors of all documents in the given Wikipedia dump using the')
+        print('given dictionary. Stores the result in matrix market format.')
+        print('Uses tf-idf for vectors unless vectorformat is specified as bow, in which case')
+        print('outputs a bag-of-words representation.')
     else:
         dump_fname = sys.argv[1]
         dict_fname = sys.argv[2]
         mm_fname = sys.argv[3]
+        vector_format = sys.argv[4] if len(sys.argv) >= 5 else 'tfidf'
         
         freq_dict = Dictionary.load(dict_fname)
-        corpus = WikiCorpus(dump_fname, dictionary = freq_dict)
+        wiki_corpus = WikiCorpus(dump_fname, dictionary = freq_dict)
         tfidf = TfidfModel(dictionary = freq_dict)
         
         # Since metadata doesn't normally stay with a document when it's
         # transformed into tf-idf values, we have to implement it ourselves
         
-        corpus.metadata = True
+        wiki_corpus.metadata = True
         metadata_queue = []
         
         class MetadataRemovedCorpus:
@@ -35,7 +38,7 @@ if __name__ == '__main__':
                     metadata_queue.append(metadata)
                     yield doc
             
-        tfidf_corpus = tfidf[MetadataRemovedCorpus(corpus)]
+        tfidf_corpus = tfidf[MetadataRemovedCorpus(wiki_corpus)]
         
         class MetadataAddedCorpus:
             def __init__(self, corpus):
@@ -47,5 +50,9 @@ if __name__ == '__main__':
                 
         tfidf_metadata_corpus = MetadataAddedCorpus(tfidf_corpus)
         
-        MmCorpus.serialize(mm_fname, tfidf_metadata_corpus, progress_cnt=10000,
-                           metadata=True)
+        if vector_format == 'tfidf':
+            corpus = tfidf_metadata_corpus
+        elif vector_format == 'bow':
+            corpus = wiki_corpus
+        
+        MmCorpus.serialize(mm_fname, corpus, progress_cnt=10000, metadata=True)
