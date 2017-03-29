@@ -32,11 +32,11 @@
     -o-user-select: none; user-select: none; }
 .sentence { cursor: pointer; }
 .sentence:hover { text-decoration: underline; }
-.united-states-t, .united-states-a, .soviet-t, .soviet-a { border-radius: 2px; padding: 2px; }
-.united-states-t { background-color: #d9edf7; }
-.united-states-a { background-color: #dff0d8; }
-.soviet-t { background-color: #f2dede; }
-.soviet-a { background-color: #fcf8e3; }
+.endpoint0-t, .endpoint0-a, .endpoint1-t, .endpoint1-a { border-radius: 2px; padding: 2px; }
+.endpoint0-t { background-color: #d9edf7; }
+.endpoint0-a { background-color: #dff0d8; }
+.endpoint1-t { background-color: #f2dede; }
+.endpoint1-a { background-color: #fcf8e3; }
   
 .container-fluid .english, .container-fluid .spanish { display: none }
 .container-fluid.english .english { display: block; }
@@ -90,9 +90,9 @@
               <ul class="english">
                 <li>If a sentence is biased, please click on that sentence
                   and then select which direction the bias exists: either
-                  &ldquo;toward the United States,&rdquo; &ldquo;against the
-                  United States,&rdquo; &ldquo;towards the Soviet Union,&rdquo;
-                  or &ldquo;against the Soviet Union&rdquo;</li>
+                  &ldquo;toward $endpoint0,&rdquo; &ldquo;against $endpoint0,
+                  &rdquo; &ldquo;towards $endpoint1,&rdquo;
+                  or &ldquo;against $endpoint1&rdquo;</li>
                 <li>If you later decide that a sentence is not biased,
                   click on that sentence and select &ldquo;clear
                   annotation&rdquo;</li>
@@ -100,8 +100,8 @@
               <ul class="spanish">
                 <li>Si la oracion muestra parcialidad, por favor seleccione la oracion 
 					con el cursor y luego seleccione la dirección de la inclanacion : 
-					sea hacia los Estados Unidos;
-                  o; hacia la Unión Soviética.</li>
+					sea hacia $endpoint0;
+                  o; hacia $endpoint1.</li>
                 <li>Si usted luego decide que la oracion no tiene inclinacion,
                   seleccione la oracion con el cursor y elimine la selección.</li>
               </ul>
@@ -139,18 +139,18 @@
           </div>
           <ul class="list-group english">
             <li class="list-group-item">Key: 
-              <span class="united-states-t">Biased towards the United States</span>
-              <span class="united-states-a">Biased against the United States</span>
-              <span class="soviet-t">Biased towards the Soviet Union</span>
-              <span class="soviet-a">Biased against the Soviet Union</span>
+              <span class="endpoint0-t">Biased towards $endpoint0</span>
+              <span class="endpoint0-a">Biased against $endpoint0</span>
+              <span class="endpoint1-t">Biased towards $endpoint1</span>
+              <span class="endpoint1-a">Biased against $endpoint1</span>
             </li>
           </ul>
           <ul class="list-group spanish">
             <li class="list-group-item">Guía: 
-              <span class="united-states-t">Preferencia hacia los Estados Unidos</span>
-              <span class="united-states-a">Preferencia contra los Estados Unidos</span>
-              <span class="soviet-t">Preferencia hacia la Unión Soviética</span>
-              <span class="soviet-a">Preferencia contra la Unión Soviética</span>
+              <span class="endpoint0-t">Preferencia hacia $endpoint0</span>
+              <span class="endpoint0-a">Preferencia contra $endpoint0</span>
+              <span class="endpoint1-t">Preferencia hacia $endpoint1</span>
+              <span class="endpoint1-a">Preferencia contra $endpoint1</span>
             </li>
           </ul>
         </div>
@@ -158,11 +158,11 @@
         <h4 class="english">Questions</h4>
         <h4 class="spanish">Preguntas</h4>
         <ol id="questions">
-          <li id="us-bias-question" class="bias-question">
+          <li id="endpoint0-bias-question" class="bias-question">
             <p class="english">How biased was the text towards or against
-              the United States?</p>
+              $endpoint0?</p>
             <p class="spanish">Cual es el sentido de la inclinacion en el
-              texto? Favorable o desfavorable hacia los Estados Unidos?</p>
+              texto? Favorable o desfavorable hacia $endpoint0?</p>
             <p class="slider"></p>
             <p class="slider-labels english">
               <span class="label-1">Very biased against</span>
@@ -174,20 +174,20 @@
               <span class="label-7">Very biased towards</span>
             </p>
             <p class="slider-labels spanish">
-              <span class="label-1">Totalmente en contra de los Estados Unidos</span>
-              <span class="label-2">Moderadamente en contra de los Estados Unidos</span>
-              <span class="label-3">Ligeramente en contra de los Estados Unidos</span>
+              <span class="label-1">Totalmente en contra de $endpoint0</span>
+              <span class="label-2">Moderadamente en contra de $endpoint0</span>
+              <span class="label-3">Ligeramente en contra de $endpoint0</span>
               <span class="label-4">No existe inclinacion</span>
-              <span class="label-5">Ligeramente a favor de los Estados Unidos</span>
-              <span class="label-6">Moderadamente a favor de los Estados Unidos</span>
-              <span class="label-7">Totalmente a favor de los Estados Unidos</span>
+              <span class="label-5">Ligeramente a favor de $endpoint0</span>
+              <span class="label-6">Moderadamente a favor de $endpoint0</span>
+              <span class="label-7">Totalmente a favor de $endpoint0</span>
             </p>
           </li>
-          <li id="soviet-bias-question" class="bias-question">
+          <li id="endpoint1-bias-question" class="bias-question">
             <p class="english">How biased was the text towards or against
-              the Soviet Union?</p>
+              $endpoint1?</p>
             <p class="spanish">Cual es el sentido de la inclinacion en el
-              texto? Favorable o desfavorable hacia la Unión Soviética?</p>
+              texto? Favorable o desfavorable hacia $endpoint1?</p>
             <p class="slider"></p>
             <p class="slider-labels english">
               <span class="label-1">Very biased against</span>
@@ -199,13 +199,13 @@
               <span class="label-7">Very biased towards</span>
             </p>
             <p class="slider-labels spanish">
-              <span class="label-1">Totalmente en contra de la Unión Soviética</span>
-              <span class="label-2">Moderadamente en contra de la Unión Soviética</span>
-              <span class="label-3">Ligeramente en contra de la Unión Soviética</span>
+              <span class="label-1">Totalmente en contra de $endpoint1</span>
+              <span class="label-2">Moderadamente en contra de $endpoint1</span>
+              <span class="label-3">Ligeramente en contra de $endpoint1</span>
               <span class="label-4">No existe inclinacion</span>
-              <span class="label-5">Ligeramente a favor de la Unión Soviética</span>
-              <span class="label-6">Moderadamente a favor de la Unión Soviética</span>
-              <span class="label-7">Totalmente a favor de la Unión Soviética</span>
+              <span class="label-5">Ligeramente a favor de $endpoint1</span>
+              <span class="label-6">Moderadamente a favor de $endpoint1</span>
+              <span class="label-7">Totalmente a favor de $endpoint1</span>
             </p>
           </li>
         </ol>
@@ -214,8 +214,8 @@
     
     <form action=>
       <input type="hidden" name="sentences" id="sentences-input" />
-      <input type="hidden" name="us_bias" id="us-bias-input" />
-      <input type="hidden" name="soviet_bias" id="soviet-bias-input" />
+      <input type="hidden" name="endpoint0_bias" id="endpoint0-bias-input" />
+      <input type="hidden" name="endpoint1_bias" id="endpoint1-bias-input" />
     </form>
   </div>
 
@@ -233,19 +233,19 @@ $$(function() {
   var menuItems;
   if (lang === 'english') {
     menuItems = {
-      'united-states-t': {name: 'Biased towards the United States'},
-      'united-states-a': {name: 'Biased against the United States'},
-      'soviet-t': {name: 'Biased towards the Soviet Union'},
-      'soviet-a': {name: 'Biased against the Soviet Union'},
+      'endpoint0-t': {name: 'Biased towards $endpoint0'},
+      'endpoint0-a': {name: 'Biased against $endpoint0'},
+      'endpoint1-t': {name: 'Biased towards $endpoint1'},
+      'endpoint1-a': {name: 'Biased against $endpoint1'},
       'sep1': "---------",
       'sentence': {name: 'Clear annotation'}
     };
   } else if (lang === 'spanish') {
     menuItems = {
-      'united-states-t': {name: 'Preferencia hacia los Estados Unidos'},
-      'united-states-a': {name: 'Preferencia contra los Estados Unidos'},
-      'soviet-t': {name: 'Preferencia hacia la Unión Soviética'},
-      'soviet-a': {name: 'Preferencia contra la Unión Soviética'},
+      'endpoint0-t': {name: 'Preferencia hacia $endpoint0'},
+      'endpoint0-a': {name: 'Preferencia contra $endpoint0'},
+      'endpoint1-t': {name: 'Preferencia hacia $endpoint1'},
+      'endpoint1-a': {name: 'Preferencia contra $endpoint1'},
       'sep1': "---------",
       'sentence': {name: 'Elimine la selección'}
     };
@@ -262,7 +262,7 @@ $$(function() {
   }).slider('value', 0);
   
   var sentenceAnnotations = [];
-  var annotationClasses = ['sentence', 'united-states-t', 'united-states-a', 'soviet-t', 'soviet-a'];
+  var annotationClasses = ['sentence', 'endpoint0-t', 'endpoint0-a', 'endpoint1-t', 'endpoint1-a'];
   var i = 0;
   $$('.sentence').each(function() {
       sentenceAnnotations.push(0);

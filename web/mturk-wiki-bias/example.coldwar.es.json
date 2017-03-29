@@ -1,5 +1,7 @@
 {
     "language": "spanish",
     "sentences": "<p><span class=\"sentence\">Un destacado defensor y portavoz del movimiento &#x27;&#x27;refúsenik&#x27;&#x27; durante la década de 1970 fue Natán Sharanski.</span> <span class=\"sentence\">Éste, con la participación del la agrupación &#x27;&#x27;Helsinki-Moscow Watch Group&#x27;&#x27;, ayudó a incorporar la lucha por los derechos de emigración dentro del contexto mayor del movimiento de derechos humanos en la URSS.</span> <span class=\"sentence\">Su posterior detención y juicio (bajo &#x27;&#x27;supuestos&#x27;&#x27; -y fabricados- cargos de espionaje y traición) terminó afectando al propio régimen soviético en el exterior, al favorecer el apoyo internacional a la causa &#x27;&#x27;refúsenik&#x27;&#x27;.</span> </p><p><span class=\"sentence\">Los &#x27;&#x27;refúseniks&#x27;&#x27; judíos incluían a aquellos que deseaban emigrar debido a motivos religiosos, a los que deseaban hacerlo debido a sus aspiraciones nacionalistas o sionistas y a los relativamente seculares, los cuales, no obstante, deseaban escapar de una corriente de antisemitismo patrocinada por el propio Estado soviético, a veces de manera sutil, y otras, de forma más visible.</span></p>",
-    "extra_instructions": ""
+    "extra_instructions": "",
+    "endpoint0": "los Estados Unidos",
+    "endpoint1": "la Unión Soviética"
 }

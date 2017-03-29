@@ -1,0 +1,7 @@
+{
+    "language": "spanish",
+    "sentences": "${sentences}",
+    "extra_instructions": "",
+    "endpoint0": "los Estados Unidos",
+    "endpoint1": "la Unión Soviética"
+}
