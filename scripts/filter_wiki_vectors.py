@@ -24,7 +24,7 @@ if __name__ == '__main__':
         # Calculate mapping of old article IDs to new ones
         old2new_id = {}
         new_index = {}
-        current_id = 1
+        current_id = 0
         for old_id, titles in in_index.items():
             if titles[0] in corpus_titles:
                 old2new_id[old_id] = current_id
@@ -45,9 +45,9 @@ if __name__ == '__main__':
             old_num_docs, dict_size, old_num_nnz = map(int,
                                                        next(in_file).split())
             for r, c, v in map(line2entry, in_file):
-                new_r = old2new_id.get(r)
+                new_r = old2new_id.get(r - 1)
                 if new_r is not None:
-                    new_entries.append((new_r, c, v))
+                    new_entries.append((new_r + 1, c, v))
         new_num_nnz = len(new_entries)
             
         logging.info('writing %s', out_fname)
