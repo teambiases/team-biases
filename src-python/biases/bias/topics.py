@@ -124,7 +124,7 @@ class LogisticTopicsBiasModel:
         freq_dict = self.lda_model.id2word
         bow = freq_dict.doc2bow(words)
         topics_vector = np.array(sparse2dense(self.lda_model[bow],self.lda_model.num_topics))
-        print(self.log_model)
+        #print(self.log_model)
         score = self.log_model.predict_proba(topics_vector.reshape(1,-1))
         result=score[0][0]
         return result
