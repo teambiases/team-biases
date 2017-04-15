@@ -21,7 +21,7 @@ class CachedTranslationClient(object):
         
         self.client = translate.Client()
         
-        self.shelf = shelve.open('data/cache/translate.google.shelf')
+        self.shelf = shelve.open(sep.join([dirname(realpath(__file__)), pardir, pardir, pardir,'/data/cache/translate.google.shelf']))
         
     def __del__(self):
         self.shelf.close()
@@ -54,6 +54,7 @@ class CachedTranslationClient(object):
                 query_index += 1
         
         if len(query_values) > 0:
+            print(query_values,'\n')
             query_results = self.client.translate(query_values,
                     target_language=target_language,
                     source_language=source_language)
