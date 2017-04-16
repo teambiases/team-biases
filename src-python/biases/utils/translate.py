@@ -7,6 +7,9 @@ import shelve
 from os.path import dirname, realpath, sep, pardir
 from google.cloud import translate
 
+# How many phrases to send to the Translate API at once
+TRANSLATE_CHUNK_SIZE = 100
+
 class CachedTranslationClient(object):
     """
     Similar to the Google Cloud Translate client object, but caches the
@@ -53,13 +56,13 @@ class CachedTranslationClient(object):
                 query_index_map[query_index] = index
                 query_index += 1
         
-        if len(query_values) > 0:
-            print(query_values,'\n')
-            query_results = self.client.translate(query_values,
+        query_results = []
+        while len(query_values) > 0:
+            query_values_chunk = query_values[:TRANSLATE_CHUNK_SIZE]
+            query_values = query_values[TRANSLATE_CHUNK_SIZE:]
+            query_results.extend(self.client.translate(query_values_chunk,
                     target_language=target_language,
-                    source_language=source_language)
-        else:
-            query_results = []
+                    source_language=source_language))
         
         for query_index, result in enumerate(query_results):
             index = query_index_map[query_index]
