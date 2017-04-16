@@ -11,7 +11,7 @@ pl = (fplr*cfpld-fpld*cfplr)^2/
 (fplr + fpld)(fplr + cfplr)(fpld + cfpld)(cfplr + cfpld)
 """
 import _path_config
-from biases.bias.gs_edited import align_ngrams, GentzkowShapiro
+from biases.bias.gs import align_ngrams, GentzkowShapiro
 import sys
 import re
 from nltk.util import ngrams

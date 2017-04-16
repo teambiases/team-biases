@@ -113,7 +113,7 @@ class GentzkowShapiro():
     """
     Contains the functions that execute the Gentzkow and Shapiro algorithm
     """
-    def __init__(alignment=None,lookup=None,file='model.pkl'):
+    def __init__(self, alignment=None, lookup=None, file='model.pkl'):
         """
         The alignment and lookup must already be calculated.
         """
@@ -123,14 +123,14 @@ class GentzkowShapiro():
         self.bigramc = None
         self.trigramc = None
 
-    def load(file='model.pkl'):
+    def load(self, file='model.pkl'):
         """
         Loads a model file. 
         """
         loaded = pickle.load(open(self.file,'r'))
         self.alignment,self.bigramc,self.trigramc,self.lookup = [loaded[key] for key in sorted(loaded,keys())]             
 
-    def c2_calculate():
+    def c2_calculate(self):
         """
         The main Gentzkow Shaprio distribution calculation
         """
@@ -155,7 +155,7 @@ class GentzkowShapiro():
                 print(gram, chi2, fpl0, fpl1)
         return c2
 
-    def train(params):
+    def train(self, params):
         """
         Given the bigrams and trigrams of the two endpoints, convert them to the
         multilingual collections in the lookup files and perform the Gentzkow
