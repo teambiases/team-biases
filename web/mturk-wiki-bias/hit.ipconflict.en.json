@@ -1,0 +1,7 @@
+{
+    "language": "english",
+    "sentences": "${sentences}",
+    "extra_instructions": "",
+    "endpoint0": "Israel",
+    "endpoint1": "Palestine"
+}
