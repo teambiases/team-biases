@@ -3,6 +3,8 @@ Utilities having to do with the gensim library.
 """
 
 import gensim, pickle
+from gensim.models import LdaModel
+from gensim.models.wrappers import LdaMallet
 
 def load_mm_corpus(mm_fname):
     """
@@ -20,3 +22,17 @@ def load_mm_corpus(mm_fname):
         index = pickle.load(index_file)
     corpus = (mm, metadata, index)
     return corpus
+
+def load_lda_model(lda_fname):
+    """
+    Loads an LDA model that could either be a Gensim trained LdaModel or a
+    MALLET wrapper (an instance of LdaMallet).
+    """
+    
+    if lda_fname.endswith('.lda.pickle'):
+        return LdaModel.load(lda_fname)
+    elif lda_fname.endswith('.ldamallet.pickle'):
+        return LdaMallet.load(lda_fname)
+    else:
+        raise ValueError('filename {} does not end with either .lda.pickle '
+                         'or .ldamallet.pickle'.format(repr(lda_fname)))

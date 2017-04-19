@@ -8,6 +8,7 @@ from gensim.models import LdaModel
 from gensim.corpora import MmCorpus
 
 from biases.utils.math import sparse2dense
+from biases.utils.gensim import load_lda_model
 
 if __name__ == '__main__':
     if len(sys.argv) != 5:
@@ -26,7 +27,7 @@ if __name__ == '__main__':
                              titles_file.readlines())
             logging.info('Loaded %d titles in corpus', len(titles_set))
             
-        lda_model = LdaModel.load(lda_fname)
+        lda_model = load_lda_model(lda_fname)
         #if not hasattr(lda_model, 'random_state'):
         #    lda_model.random_state = get_random_state(None)
         freq_dict = lda_model.id2word
@@ -40,7 +41,7 @@ if __name__ == '__main__':
                 langs.append(lang)
         logging.info('Found languages: %s', ', '.join(langs))
         
-        corpora_topics = [[] for _ in langs]
+        corpora_vectors = [[] for _ in langs]
         corpora_titles = [[] for _ in langs]
         
         vectors = MmCorpus(vectors_fname)
@@ -49,13 +50,17 @@ if __name__ == '__main__':
                 lang_vectors = {lang: [] for lang in langs}
                 for word_id, weight in vector:
                     lang_vectors[id2lang[word_id]].append((word_id, weight))
-                for corpus_topics, corpus_titles, lang, title in \
-                        zip(corpora_topics, corpora_titles, langs, titles):
+                for corpus_vectors, corpus_titles, lang, title in \
+                        zip(corpora_vectors, corpora_titles, langs, titles):
                     lang_vector = lang_vectors[lang]
-                    topics_vector = sparse2dense(lda_model[lang_vector],
-                                                 lda_model.num_topics)
-                    corpus_topics.append(topics_vector)
+                    corpus_vectors.append(lang_vector)
                     corpus_titles.append(title)
+                    
+        corpora_topics = []
+        for corpus_vectors in corpora_vectors:
+            corpus_topics = [sparse2dense(sparse_topics, lda_model.num_topics)
+                             for sparse_topics in lda_model[corpus_vectors]]
+            corpora_topics.append(corpus_topics)
                     
         combined_corpora = []
         for lang, corpus_titles, corpus_topics in \

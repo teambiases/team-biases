@@ -1,8 +1,19 @@
 
 import pickle
 import numpy as np
+import csv
+import pickle
 
 from sklearn.neighbors import KNeighborsRegressor
+from gensim.utils import tokenize
+from gensim.corpora import dictionary
+from sklearn.linear_model import LogisticRegression
+from sklearn.feature_selection import VarianceThreshold
+from sklearn.pipeline import make_pipeline
+from sklearn.model_selection import cross_val_score,train_test_split
+
+from biases.utils.gensim import load_lda_model
+from biases.utils.math import sparse2dense
 
 class TopicsBiasModel:
     """Bias model that uses topic modeling and a KNN regression to place
@@ -87,9 +98,6 @@ class TopicsBiasModel:
 
 class LogisticTopicsBiasModel:
 
-    import csv
-    import pickle
-
     def __init__(self, topic_corpus_fname, topic_model_fname, model_fname):
         self.topic_corpus_fname = topic_corpus_fname
         self.topic_model_fname = topic_model_fname
@@ -97,33 +105,26 @@ class LogisticTopicsBiasModel:
         self.es, self.en, self.rus = pickle.load(open(self.topic_corpus_fname,'rb'))
 
     def load(self):
-        from gensim.models import LdaModel
-        self.lda_model = LdaModel.load(self.topic_model_fname)
-
+        self.lda_model = load_lda_model(self.topic_model_fname)
 
     def train(self):
-        from sklearn.linear_model import LogisticRegression
-        from sklearn.feature_selection import VarianceThreshold
-        from sklearn.pipeline import make_pipeline
-        from sklearn.model_selection import cross_val_score,train_test_split
         en_array = self.en[2]
         rus_array = self.rus[2]
-        Engl = np.hstack((np.ones(len(en_array)),np.zeros(len(rus_array))))  # ENGLISH = 1
+        Engl = np.hstack((np.zeros(len(en_array)),np.ones(len(rus_array))))  # ENGLISH = 0
         Freq = np.concatenate((en_array,rus_array))
         model = make_pipeline(VarianceThreshold(), LogisticRegression())
         self.log_model = model.fit(Freq,Engl)
 
 
     def predict(self, document, lang):
-        from gensim.utils import tokenize
-        from gensim.corpora import dictionary
-        from biases.utils.math import sparse2dense
         words = []
         for sentence in document:
             words += [lang + '#' + word for word in sentence]
+        #print('. '.join(' '.join(sentence) for sentence in document))
         freq_dict = self.lda_model.id2word
         bow = freq_dict.doc2bow(words)
         topics_vector = np.array(sparse2dense(self.lda_model[bow],self.lda_model.num_topics))
+        #print(topics_vector)
         #print(self.log_model)
         score = self.log_model.predict_proba(topics_vector.reshape(1,-1))
         result=score[0][0]

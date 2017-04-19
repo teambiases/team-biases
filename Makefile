@@ -24,6 +24,25 @@ SAMPLE_CHUNKS=3
 
 LDA_TOPICS=100
 LDA_PASSES=3
+# set to nothing if you don't want to use MALLET, otherwise set to mallet
+USE_MALLET=true
+USE_CORPUS=$(USE_MALLET)
+
+ifeq ($(USE_MALLET),true)
+MALLET_PART=mallet
+MALLET_FLAG=m
+VECTOR_TYPE=bow
+else
+MALLET_PART=
+MALLET_FLAG=
+VECTOR_TYPE=tfidf
+endif
+
+ifeq ($(USE_CORPUS),true)
+CORPUS_PART=$(CORPUS_NAME).
+else
+CORPUS_PART=
+endif
 
 .PRECIOUS: $(DATADIR)/wikipedia/dict/%.dict.pickle \
 	$(DATADIR)/wikipedia/vector/%.tfidf.mm.bz2 \
@@ -124,7 +143,7 @@ $(DATADIR)/lda/$(CORPUS_NAME).%.$(LDA_TOPICS)t.ldamallet.pickle : scripts/train_
 	
 # Output LDA topics to CSV
 	
-$(DATADIR)/lda/%.lda.topics.csv : scripts/lda_to_csv.py $(DATADIR)/lda/%.lda.pickle
+$(DATADIR)/lda/%.topics.csv : scripts/lda_to_csv.py $(DATADIR)/lda/%.pickle
 	mkdir -p $(dir $@)
 	$(PYTHON) $^ $@
 
@@ -152,19 +171,20 @@ $(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).titles.%.txt : scripts
 	
 # Create corpus with topics
 
-$(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).$(LDA_TOPICS)topics.pickle : scripts/build_topics_corpus.py \
+$(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).$(LDA_TOPICS)$(MALLET_FLAG)topics.pickle : \
+	scripts/build_topics_corpus.py \
 	$(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).titles.$(TARGETLANG).txt \
-	$(DATADIR)/wikipedia/vector/$(CORPUS_NAME).$(COMBINED_ID).parallel.tfidf.mm.bz2 \
-	$(DATADIR)/lda/$(COMBINED_ID).parallel.$(LDA_TOPICS)t.lda.pickle
+	$(DATADIR)/wikipedia/vector/$(CORPUS_NAME).$(COMBINED_ID).parallel.$(VECTOR_TYPE).mm.bz2 \
+	$(DATADIR)/lda/$(CORPUS_PART)$(COMBINED_ID).parallel.$(LDA_TOPICS)t.lda$(MALLET_PART).pickle
 	mkdir -p $(dir $@)
 	$(PYTHON) $^ $@
 	
 # Analyze corpus with topics
 
-$(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).$(LDA_TOPICS)topics.analysis.csv : \
+$(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).$(LDA_TOPICS)$(MALLET_FLAG)topics.analysis.csv : \
 	scripts/analyze_topics_corpus.py \
-	$(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).$(LDA_TOPICS)topics.pickle \
-	$(DATADIR)/lda/$(COMBINED_ID).parallel.$(LDA_TOPICS)t.lda.pickle
+	$(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).$(LDA_TOPICS)$(MALLET_FLAG)topics.pickle \
+	$(DATADIR)/lda/$(COMBINED_ID).parallel.$(LDA_TOPICS)t.lda$(USE_MALLET).pickle
 	mkdir -p $(dir $@)
 	$(PYTHON) $^ $@
 	
@@ -173,14 +193,14 @@ topicscorpus: $(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).$(LDA_TO
 	
 # Train topics bias model
 
-$(DATADIR)/bias/$(CORPUS_NAME).$(COMBINED_ID).$(LDA_TOPICS)topics.biasmodel.pickle : \
+$(DATADIR)/bias/$(CORPUS_NAME).$(COMBINED_ID).$(LDA_TOPICS)$(MALLET_FLAG)topics.biasmodel.pickle : \
 	scripts/train_logistic_topic_bias_model.py \
-	$(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).$(LDA_TOPICS)topics.pickle \
-	$(DATADIR)/lda/$(COMBINED_ID).parallel.$(LDA_TOPICS)t.lda.pickle
+	$(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).$(LDA_TOPICS)$(MALLET_FLAG)topics.pickle \
+	$(DATADIR)/lda/$(CORPUS_PART)$(COMBINED_ID).parallel.$(LDA_TOPICS)t.lda$(MALLET_PART).pickle
 	mkdir -p $(dir $@)
 	$(PYTHON) $^ $@
 	
-topicsbiasmodel: $(DATADIR)/bias/$(CORPUS_NAME).$(COMBINED_ID).$(LDA_TOPICS)topics.biasmodel.pickle
+topicsbiasmodel: $(DATADIR)/bias/$(CORPUS_NAME).$(COMBINED_ID).$(LDA_TOPICS)$(MALLET_FLAG)topics.biasmodel.pickle
 
 # Use bias models to score chunks
 
@@ -192,7 +212,7 @@ $(DATADIR)/wikipedia/bias/$(CORPUS_NAME).$(COMBINED_ID).$(SAMPLE_SEED).%.scores.
 	mkdir -p $(dir $@)
 	$(PYTHON) $^ $(TARGETLANG) $@
 	
-topicsscores: $(DATADIR)/wikipedia/bias/$(CORPUS_NAME).$(COMBINED_ID).$(SAMPLE_SEED).400topics.scores.csv \
+topicsscores: $(DATADIR)/wikipedia/bias/$(CORPUS_NAME).$(COMBINED_ID).$(SAMPLE_SEED).$(LDA_TOPICS)$(MALLET_FLAG)topics.scores.csv \
 	$(DATADIR)/wikipedia/bias/$(CORPUS_NAME).$(COMBINED_ID).$(SAMPLE_SEED).mturk.scores.csv
 	$(PYTHON) scripts/correlate_scores.py $^
 
