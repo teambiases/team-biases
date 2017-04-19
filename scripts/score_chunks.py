@@ -27,8 +27,8 @@ if __name__ == '__main__':
                 chunk_index = int(chunk_index)
                 sample_chunk_ids.add((article, section_index, chunk_index))
             
-        sample_articles = [article for article, section_index, chunk_index in
-                           sample_chunk_ids]
+        sample_articles = list(dict.fromkeys(article for article,
+                section_index, chunk_index in sample_chunk_ids))
         
         # Load chunks
         with open(chunks_fname, 'rb') as chunks_file:
@@ -54,7 +54,7 @@ if __name__ == '__main__':
                         chunk_sents = []
                         for paragraph in chunk.paragraphs:
                             for sentence in paragraph:
-                                chunk_sents.append(tokenize(sentence))
+                                chunk_sents.append(list(tokenize(sentence)))
                         score = bias_model.predict(chunk_sents, lang)
                         scores_csv.writerow([article, section_index,
                                              chunk_index, score]) 
