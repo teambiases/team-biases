@@ -62,5 +62,6 @@ if __name__ == '__main__':
         id2word = Dictionary.load(dict_fname)
         
         lda_model = LdaMallet(mallet_path, corpus=normalize_langs(mm), 
-                id2word=id2word, num_topics=num_topics)
+                id2word=id2word, num_topics=num_topics,
+                prefix=model_fname[:-6], iterations=100)
         lda_model.save(model_fname)
