@@ -12,6 +12,7 @@ pl = (fplr*cfpld-fpld*cfplr)^2/
 """
 import _path_config
 from biases.bias.gs import align_ngrams, GentzkowShapiro
+from itertools import tee
 import sys
 import re
 from nltk.util import ngrams
@@ -23,7 +24,8 @@ if __name__ == '__main__':
         print('and computes the Gentzkow-Shapiro algorithm, outputting <out_file> pickle file for the phrases')
     else:
         with open(sys.argv[1], 'r') as e0, open(sys.argv[2], 'r') as e1:
-            langs = sys.argv[3:-1]
+            print(sys.argv[3:])
+            langs = sys.argv[3:]
             outfile = sys.argv[-1]
             e0lang = langs[0]
             e1lang = langs[1]
@@ -33,12 +35,22 @@ if __name__ == '__main__':
             e0rawiter, e1rawiter = wordfind(e0rawiter),wordfind(e1rawiter)
             bigram0, bigram1 = ngrams(e0rawiter,2), ngrams(e1rawiter,2)
             trigram0, trigram1 = ngrams(e0rawiter,3),ngrams(e1rawiter,3)
-            lang_ngrams = [(e0lang,bi) for bi in bigram0] + [(e0lang,tri) for tri in trigram0] + [(e1lang,bi) for bi in bigram1] + [(e1lang,tri) for tri in trigram1] 
-            num_grams = len(lang_ngrams)
-            smaller_sample = lang_ngrams[0:100] + lang_ngrams[round(num_grams/4):round(num_grams/4+100)] + lang_ngrams[round(num_grams/2):round(num_grams/2+100)] + lang_ngrams[round(3*num_grams/4):round(3*num_grams/4+100)]
-            alignment,lookup = align_ngrams(smaller_sample)
+
+            #this is only for size reduction
+            def g(x):
+                for y in x:
+                    yield y
+            bigram0, bigram1, trigram0, trigram1 = g([x for x in bigram0][:100]),g([x for x in bigram1][:100]),g([x for x in trigram0][:100]),g([x for x in trigram1][:100])
+            (bigram0,b0) , (bigram1, b1), (trigram0, t0), (trigram1, t1) = tee(bigram0), tee(bigram1), tee(trigram0), tee(trigram1)
+            lang_ngrams = [(e0lang," ".join(bi)) for bi in bigram0] + [(e0lang," ".join(tri)) for tri in trigram0] + [(e1lang," ".join(bi)) for bi in bigram1] + [(e1lang," ".join(tri)) for tri in trigram1] 
+            translate_iter = {lang:[] for lang in langs}
+            for item in list(set(lang_ngrams)):
+                translate_iter[item[0]].append(item[1])
+
+            translate_pack = [(lang,translate_iter[lang]) for lang in translate_iter]
+            alignment,lookup = align_ngrams(translate_pack)
             gs = GentzkowShapiro(alignment,lookup)
-            params = bigram0,bigram1,trigram0,trigram1,langs,langs.index('en')
+            params = b0,b1,t0,t1,langs,langs.index('en')
 
             gs.train(params)
 

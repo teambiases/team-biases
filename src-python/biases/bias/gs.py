@@ -4,6 +4,7 @@ from biases.utils.translate import translation_client
 from nltk.util import ngrams
 from collections import Counter
 from stop_words import get_stop_words
+from itertools import tee
 import pickle
 import itertools
 import sys
@@ -161,20 +162,21 @@ class GentzkowShapiro():
                     c2[gram]=([gram, chi2, fpl0, fpl1])
                     print(gram, chi2, fpl0, fpl1)
             return c2
+        def gen(l,g):
+            for g1 in g:
+                yield lookup[l][" ".join(g1)]
 
         lookup = self.lookup
         bigram0, bigram1, trigram0, trigram1, langs, filter_index = params
-        bigram0, bigram1, trigram0, trigram1 =\
-            ([[lookup[lang][b] for lang in langs] for b in bigram0],
-                [[lookup[lang][b] for lang in langs] for b in bigram1],
-                [[lookup[lang][t] for lang in langs] for t in trigram0],
-                [[lookup[lang][t] for lang in langs] for t in trigram1])
-        #We now create a mapping between the bigrams and trigrams with their chi^2 value as well as e0, e1 frequencies
+        (bigram0,b0) , (bigram1, b1), (trigram0, t0), (trigram1, t1) = tee(bigram0), tee(bigram1), tee(trigram0), tee(trigram1)
 
-        self.bigram0 = sorted([x for x in bigram0 if (not x[filter_index][0] in sw and not x[filter_index][-1] in sw)])
-        self.bigram1 = sorted([x for x in bigram1 if (not x[filter_index][0] in sw and not x[filter_index][-1] in sw)])
-        self.trigram0 = sorted([x for x in trigram0 if (not x[filter_index][0] in sw and not x[filter_index][-1] in sw)])
-        self.trigram1 = sorted([x for x in trigram1 if (not x[filter_index][0] in sw and not x[filter_index][-1] in sw)]) 
+        (bigram0,b0) , (bigram1, b1), (trigram0, t0), (trigram1, t1) = tee(gen(langs[0],bigram0)),tee(gen(langs[1],bigram1)),tee(gen(langs[0],trigram0)),tee(gen(langs[1],trigram1))
+        #We now create a mapping between the bigrams and trigrams with their chi^2 value as well as e0, e1 frequencies
+        sw = get_stop_words('en')
+        self.bigram0 = sorted([x for x in bigram0 if (not x[filter_index].split()[0] in sw and not x[filter_index].split()[-1] in sw)])
+        self.bigram1 = sorted([x for x in bigram1 if (not x[filter_index].split()[0] in sw and not x[filter_index].split()[-1] in sw)])
+        self.trigram0 = sorted([x for x in trigram0 if (not x[filter_index].split()[0] in sw and not x[filter_index].split()[-1] in sw)])
+        self.trigram1 = sorted([x for x in trigram1 if (not x[filter_index].split()[0] in sw and not x[filter_index].split()[-1] in sw)]) 
 
         # c2_calculate(c2values, bigram0+bigram1, bigram0, bigram1)
         # c2_calculate(c2values, trigram0+trigram1, trigram0, trigram1)
