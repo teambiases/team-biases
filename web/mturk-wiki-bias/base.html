@@ -1,25 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-  <title>Read and annotate a paragraph from a Wikipedia article</title>
-
-  <!-- Bootstrap -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-  <!-- jQuery UI -->
-  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-  <!-- contextMenu -->
-  <link rel="stylesheet" href="https://cdn.rawgit.com/swisnl/jQuery-contextMenu/master/dist/jquery.contextMenu.min.css">
-  
-  <style type="text/css">
-.bias-question { width: 800px; position: relative; margin: 20px 0 60px 0; }
+<meta charset="utf-8" />
+<meta content="IE=edge" http-equiv="X-UA-Compatible" />
+<meta content="width=device-width, initial-scale=1" name="viewport" /><!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+<title></title>
+<!-- Bootstrap -->
+<link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" rel="stylesheet" /><!-- jQuery UI -->
+<link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css" rel="stylesheet" /><!-- contextMenu -->
+<link href="https://cdn.rawgit.com/swisnl/jQuery-contextMenu/master/dist/jquery.contextMenu.min.css" rel="stylesheet" />
+<style type="text/css">.bias-question { width: 800px; position: relative; margin: 20px 0 60px 0; }
 .bias-question .slider-labels span { position: absolute; }
 .bias-question .slider-labels:before { content: "\00a0"; }
 .bias-question .slider { left: 7%; right: 7%; width: 85% }
 .bias-question .slider-labels span { font-size: 12px; text-align: center; }
+input { width: 100% ; height: 200px}
 .label-1 { left: 0%; right: 89%; text-align: left; }
 .label-2 { left: 14%; right: 74%; text-align: left; }
 .label-3 { left: 29%; right: 59%; text-align: center; }
@@ -41,257 +33,184 @@
 .container-fluid .english, .container-fluid .spanish { display: none }
 .container-fluid.english .english { display: block; }
 .container-fluid.spanish .spanish { display: block; }
-  </style>
-  
-  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-  <!--[if lt IE 9]>
+</style>
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries --><!-- WARNING: Respond.js doesn't work if you view the page via file:// --><!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
-</head>
-<body class="" style="padding: 15px 0;">
-  <div id="bias-survey" class="container-fluid $language" data-language="$language">
-    <div class="row">
-      <div class="col-md-12">
-        <div id="instructions" class="panel panel-primary">
-          <div class="panel-heading">
-            <h4 class="panel-title english">
-              Instructions <small> <a role="button"
-                data-toggle="collapse" href="#instructions-body"> show/hide</a>
-              </small>
-            </h4>
-            <h4 class="panel-title spanish">
-              Instrucciones <small> <a role="button"
-                data-toggle="collapse" href="#instructions-body"> mostrar/ocultar</a>
-              </small>
-            </h4>
-          </div>
-          <div id="instructions-body" class="collapse in">
-            <div class="panel-body">
-              <p class="english">Hello! Thank you for taking the time to be
-                a part of this survey. Today, the following survey is looking to
-                detect and understand bias at a sentence level in Spanish texts
-                on media about the Cold War. For the purposes of this survey,
-                bias is defined as imbalances in presentation that would suggest
-                a preference or prejudice. In the following text, we ask that
-                you read the sentences, and be able to select whether a specific
-                sentence is biased, and the direction in which it is biased.</p>
-              <p class="spanish">Hola, muchas gracias por dedicar tu tiempo y participar 
-				  en esta encuesta. La encuesta busca detectar y entender la inclinacion
-				   o preferencia en una frase o oración en español dentro de los medios 
-				   de comunicación referente a la Guerra Fria. Para el propósito de esta 
-				   encuesta, esta inclinacion tiene la definición de existencia de 
-				   imbalance, lo que conlleva a sugerir la existencia de preferencia 
-				   o preconcepción. En el párrafo siguiente, le pedimos que lea 
-				   las frases, y que seleccione y especifique que oracion 
-				   es inclinada hacia un punto de vista y cual es la dirección 
-				   de esta preferencia o inclinacion.</p>
-              <ul class="english">
-                <li>If a sentence is biased, please click on that sentence
-                  and then select which direction the bias exists: either
-                  &ldquo;toward $endpoint0,&rdquo; &ldquo;against $endpoint0,
-                  &rdquo; &ldquo;towards $endpoint1,&rdquo;
-                  or &ldquo;against $endpoint1&rdquo;</li>
-                <li>If you later decide that a sentence is not biased,
-                  click on that sentence and select &ldquo;clear
-                  annotation&rdquo;</li>
-              </ul>
-              <ul class="spanish">
-                <li>Si la oracion muestra parcialidad, por favor seleccione la oracion 
-					con el cursor y luego seleccione la dirección de la inclanacion : 
-					sea hacia $endpoint0;
-                  o; hacia $endpoint1.</li>
-                <li>Si usted luego decide que la oracion no tiene inclinacion,
-                  seleccione la oracion con el cursor y elimine la selección.</li>
-              </ul>
-              <p class="english">After going through the text and tagging
-                the text with the applicable above tags, you will be asked to
-                answer two questions determining overall text bias. Upon both
-                tagging the text and answering the two questions, you will have
-                completed the survey.</p>
-              <p class="spanish">Después de revisar todo el parrafo y
-                seleccionar sus etiquetas, por favor conteste dos preguntas que
-                determinarán la inclinacion general del parrafo. Después de
-                etiquetar y contestar las dos preguntas, usted habrá terminado la
-                encuesta.</p>
+<div class="container-fluid spanish" data-language="spanish" id="bias-survey">
+<div class="row">
+<div class="col-md-12">
+<div class="panel panel-primary" id="instructions">
+<div class="panel-heading">
+<h4 class="panel-title english">Instructions <small> <a data-toggle="collapse" href="#instructions-body" role="button"> show/hide</a> </small></h4>
 
-              $extra_instructions
-            </div>
-          </div>
-        </div>
+<h4 class="panel-title spanish">Instrucciones <small> <a data-toggle="collapse" href="#instructions-body" role="button"> mostrar/ocultar</a> </small></h4>
+</div>
 
-        <div id="annotation" class="panel panel-default">
-          <div class="panel-heading">
-            <h4 class="panel-title english">
-              Text to annotate <small>(click on a sentence to annotate
-                it)</small>
-            </h4>
-            <h4 class="panel-title spanish">
-              Texto para anotar <small>(seleccione
-                con el cursor en la oracion y anote)</small>
-            </h4>
-          </div>
-          <div class="panel-body" unselectable="on">
-            <div id="document">
-              $sentences
-            </div>
-          </div>
-          <ul class="list-group english">
-            <li class="list-group-item">Key: 
-              <span class="endpoint0-t">Biased towards $endpoint0</span>
-              <span class="endpoint0-a">Biased against $endpoint0</span>
-              <span class="endpoint1-t">Biased towards $endpoint1</span>
-              <span class="endpoint1-a">Biased against $endpoint1</span>
-            </li>
-          </ul>
-          <ul class="list-group spanish">
-            <li class="list-group-item">Guía: 
-              <span class="endpoint0-t">Preferencia hacia $endpoint0</span>
-              <span class="endpoint0-a">Preferencia contra $endpoint0</span>
-              <span class="endpoint1-t">Preferencia hacia $endpoint1</span>
-              <span class="endpoint1-a">Preferencia contra $endpoint1</span>
-            </li>
-          </ul>
-        </div>
+<div class="collapse in" id="instructions-body">
+<div class="panel-body">
+<p class="english">Hello! Thank you for taking the time to be a part of this survey. Today, the following survey is looking to detect and understand bias at a sentence level in Spanish texts on media about the Cold War. For the purposes of this survey, bias is defined as imbalances in presentation that would suggest a preference or prejudice. In the following text, we ask that you read the sentences, and be able to select whether a specific sentence is biased, and the direction in which it is biased.</p>
 
-        <h4 class="english">Questions</h4>
-        <h4 class="spanish">Preguntas</h4>
-        <ol id="questions">
-          <li id="endpoint0-bias-question" class="bias-question">
-            <p class="english">How biased was the text towards or against
-              $endpoint0?</p>
-            <p class="spanish">Cual es el sentido de la inclinacion en el
-              texto? Favorable o desfavorable hacia $endpoint0?</p>
-            <p class="slider"></p>
-            <p class="slider-labels english">
-              <span class="label-1">Very biased against</span>
-              <span class="label-2">Moderately biased against</span>
-              <span class="label-3">Slightly biased against</span>
-              <span class="label-4">Not biased</span>
-              <span class="label-5">Slightly biased towards</span>
-              <span class="label-6">Moderately biased towards</span>
-              <span class="label-7">Very biased towards</span>
-            </p>
-            <p class="slider-labels spanish">
-              <span class="label-1">Totalmente en contra de $endpoint0</span>
-              <span class="label-2">Moderadamente en contra de $endpoint0</span>
-              <span class="label-3">Ligeramente en contra de $endpoint0</span>
-              <span class="label-4">No existe inclinacion</span>
-              <span class="label-5">Ligeramente a favor de $endpoint0</span>
-              <span class="label-6">Moderadamente a favor de $endpoint0</span>
-              <span class="label-7">Totalmente a favor de $endpoint0</span>
-            </p>
-          </li>
-          <li id="endpoint1-bias-question" class="bias-question">
-            <p class="english">How biased was the text towards or against
-              $endpoint1?</p>
-            <p class="spanish">Cual es el sentido de la inclinacion en el
-              texto? Favorable o desfavorable hacia $endpoint1?</p>
-            <p class="slider"></p>
-            <p class="slider-labels english">
-              <span class="label-1">Very biased against</span>
-              <span class="label-2">Moderately biased against</span>
-              <span class="label-3">Slightly biased against</span>
-              <span class="label-4">Not biased</span>
-              <span class="label-5">Slightly biased towards</span>
-              <span class="label-6">Moderately biased towards</span>
-              <span class="label-7">Very biased towards</span>
-            </p>
-            <p class="slider-labels spanish">
-              <span class="label-1">Totalmente en contra de $endpoint1</span>
-              <span class="label-2">Moderadamente en contra de $endpoint1</span>
-              <span class="label-3">Ligeramente en contra de $endpoint1</span>
-              <span class="label-4">No existe inclinacion</span>
-              <span class="label-5">Ligeramente a favor de $endpoint1</span>
-              <span class="label-6">Moderadamente a favor de $endpoint1</span>
-              <span class="label-7">Totalmente a favor de $endpoint1</span>
-            </p>
-          </li>
-        </ol>
-      </div>
-    </div>
-    
-    <input type="hidden" name="sentences" id="sentences-input" />
-    <input type="hidden" name="endpoint0_bias" id="endpoint0-bias-input" />
-    <input type="hidden" name="endpoint1_bias" id="endpoint1-bias-input" />
-  </div>
+<p class="spanish">Hola, muchas gracias por dedicar tu tiempo y participar en esta encuesta. La encuesta busca detectar y entender la inclinacion o preferencia en una frase o oraci&oacute;n en espa&ntilde;ol dentro de los medios de comunicaci&oacute;n referente a la Guerra Fria. Para el prop&oacute;sito de esta encuesta, esta inclinacion tiene la definici&oacute;n de existencia de imbalance, lo que conlleva a sugerir la existencia de preferencia o preconcepci&oacute;n. En el p&aacute;rrafo siguiente, le pedimos que lea las frases, y que seleccione y especifique que oracion es inclinada hacia un punto de vista y cual es la direcci&oacute;n de esta preferencia o inclinacion.</p>
 
-  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-  <!-- Bootstrap JavaScript -->
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-  <script src="https://cdn.rawgit.com/swisnl/jQuery-contextMenu/e94aefab380fb9f8d2c34201fdd10119024bb945/dist/jquery.contextMenu.min.js" type="text/javascript"></script>
+<ul class="english">
+  <li>If a sentence is biased, please click on that sentence and then select which direction the bias exists: either &ldquo;toward los Estados Unidos,&rdquo; &ldquo;against los Estados Unidos, &rdquo; &ldquo;towards la Uni&oacute;n Sovi&eacute;tica,&rdquo; or &ldquo;against la Uni&oacute;n Sovi&eacute;tica&rdquo;</li>
+  <li>If you later decide that a sentence is not biased, click on that sentence and select &ldquo;clear annotation&rdquo;</li>
+</ul>
 
-  <script type="text/javascript">
+<ul class="spanish">
+  <li>Si la oracion muestra parcialidad, por favor seleccione la oracion con el cursor y luego seleccione la direcci&oacute;n de la inclanacion : sea hacia los Estados Unidos; o; hacia la Uni&oacute;n Sovi&eacute;tica.</li>
+  <li>Si usted luego decide que la oracion no tiene inclinacion, seleccione la oracion con el cursor y elimine la selecci&oacute;n.</li>
+</ul>
+
+<p class="english">After going through the text and tagging the text with the applicable above tags, you will be asked to answer two questions determining overall text bias. Upon both tagging the text and answering the two questions, you will have completed the survey.</p>
+
+<p class="spanish">Despu&eacute;s de revisar todo el parrafo y seleccionar sus etiquetas, por favor conteste dos preguntas que determinar&aacute;n la inclinacion general del parrafo. Despu&eacute;s de etiquetar y contestar las dos preguntas, usted habr&aacute; terminado la encuesta.</p>
+</div>
+</div>
+</div>
+
+<div class="panel panel-default" id="annotation">
+<div class="panel-heading">
+<h4 class="panel-title english">Text to annotate <small>(click on a sentence to annotate it)</small></h4>
+
+<h4 class="panel-title spanish">Texto para anotar <small>(seleccione con el cursor en la oracion y anote)</small></h4>
+</div>
+
+<div class="panel-body" unselectable="on">
+<div id="document">${sentences}</div>
+</div>
+
+<ul class="list-group english">
+  <li class="list-group-item">Key: <span class="endpoint0-t">Biased towards los Estados Unidos</span> <span class="endpoint0-a">Biased against los Estados Unidos</span> <span class="endpoint1-t">Biased towards la Uni&oacute;n Sovi&eacute;tica</span> <span class="endpoint1-a">Biased against la Uni&oacute;n Sovi&eacute;tica</span></li>
+</ul>
+
+<ul class="list-group spanish">
+  <li class="list-group-item">Gu&iacute;a: <span class="endpoint0-t">Preferencia hacia los Estados Unidos</span> <span class="endpoint0-a">Preferencia contra los Estados Unidos</span> <span class="endpoint1-t">Preferencia hacia la Uni&oacute;n Sovi&eacute;tica</span> <span class="endpoint1-a">Preferencia contra la Uni&oacute;n Sovi&eacute;tica</span></li>
+</ul>
+</div>
+
+<h4 class="english">Questions</h4>
+
+<h4 class="spanish">Preguntas</h4>
+
+<ol id="questions">
+  <li class="bias-question" id="endpoint0-bias-question">
+  <p class="english">How biased was the text towards or against los Estados Unidos?</p>
+
+  <p class="spanish">Cual es el sentido de la inclinacion en el texto? Favorable o desfavorable hacia los Estados Unidos?</p>
+
+  <p class="slider">&nbsp;</p>
+
+  <p class="slider-labels english"><span class="label-1">Very biased against</span> <span class="label-2">Moderately biased against</span> <span class="label-3">Slightly biased against</span> <span class="label-4">Not biased</span> <span class="label-5">Slightly biased towards</span> <span class="label-6">Moderately biased towards</span> <span class="label-7">Very biased towards</span></p>
+
+  <p class="slider-labels spanish"><span class="label-1">Totalmente en contra de los Estados Unidos</span> <span class="label-2">Moderadamente en contra de los Estados Unidos</span> <span class="label-3">Ligeramente en contra de los Estados Unidos</span> <span class="label-4">No existe inclinacion</span> <span class="label-5">Ligeramente a favor de los Estados Unidos</span> <span class="label-6">Moderadamente a favor de los Estados Unidos</span> <span class="label-7">Totalmente a favor de los Estados Unidos</span></p>
+  </li>
+  <li class="bias-question" id="endpoint1-bias-question">
+  <p class="english">How biased was the text towards or against la Uni&oacute;n Sovi&eacute;tica?</p>
+
+  <p class="spanish">Cual es el sentido de la inclinacion en el texto? Favorable o desfavorable hacia la Uni&oacute;n Sovi&eacute;tica?</p>
+
+  <p class="slider">&nbsp;</p>
+
+  <p class="slider-labels english"><span class="label-1">Very biased against</span> <span class="label-2">Moderately biased against</span> <span class="label-3">Slightly biased against</span> <span class="label-4">Not biased</span> <span class="label-5">Slightly biased towards</span> <span class="label-6">Moderately biased towards</span> <span class="label-7">Very biased towards</span></p>
+
+  <p class="slider-labels spanish"><span class="label-1">Totalmente en contra de la Uni&oacute;n Sovi&eacute;tica</span> <span class="label-2">Moderadamente en contra de la Uni&oacute;n Sovi&eacute;tica</span> <span class="label-3">Ligeramente en contra de la Uni&oacute;n Sovi&eacute;tica</span> <span class="label-4">No existe inclinacion</span> <span class="label-5">Ligeramente a favor de la Uni&oacute;n Sovi&eacute;tica</span> <span class="label-6">Moderadamente a favor de la Uni&oacute;n Sovi&eacute;tica</span> <span class="label-7">Totalmente a favor de la Uni&oacute;n Sovi&eacute;tica</span></p>
+  </li>
+  <!-- Q3 starts here -->
+  <li class="bias-question" id="endpoint1-bias-question">
+  <p class="english">Q3 engl</p>
+
+  <p class="spanish">&iquest;Cuales caracteristicas del texto influyeron tu respuesta a Preguntas 1 y 2?</p>
+  <input name="response-characteristics" type="text" /></li>
+  <li class="bias-question" id="endpoint1-bias-question">
+  <p class="english">Q 4 engl</p>
+
+  <p class="spanish">&iquest;Que frases influyeron tu respuesta a Preguntas 1 y 2?</p>
+  <input name="response-phrases" type="text" /></li>
+  <li class="bias-question" id="endpoint1-bias-question">
+  <p class="english">Q 5 english</p>
+
+  <p class="spanish">&iquest;Que palabras influyeron tu respuesta a Preguntas 1 y 2?</p>
+  <input name="response-words" type="text" /></li>
+  <li class="bias-question" id="endpoint1-bias-question">
+  <p class="english">Q 6 engl</p>
+
+  <p class="spanish">&iquest;Hubo un desequilibro de la informacion que influyera tu respuesta a Prequnta 1 y 2?</p>
+  <input name="response-imbalance" type="text" /></li>
+</ol>
+</div>
+</div>
+<input id="sentences-input" name="sentences" type="hidden" /> <input id="endpoint0-bias-input" name="endpoint0_bias" type="hidden" /> <input id="endpoint1-bias-input" name="endpoint1_bias" type="hidden" /></div>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+
+<p><script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script><script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>{C}<!-- Bootstrap JavaScript --><script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><script src="https://cdn.rawgit.com/swisnl/jQuery-contextMenu/e94aefab380fb9f8d2c34201fdd10119024bb945/dist/jquery.contextMenu.min.js" type="text/javascript"></script><script type="text/javascript">
   
-$$(function() {
-  var lang = $$('#bias-survey').attr('data-language');
+$(function() {
+  var lang = $('#bias-survey').attr('data-language');
   var menuItems;
   if (lang === 'english') {
     menuItems = {
-      'endpoint0-t': {name: 'Biased towards $endpoint0'},
-      'endpoint0-a': {name: 'Biased against $endpoint0'},
-      'endpoint1-t': {name: 'Biased towards $endpoint1'},
-      'endpoint1-a': {name: 'Biased against $endpoint1'},
+      'endpoint0-t': {name: 'Biased towards los Estados Unidos'},
+      'endpoint0-a': {name: 'Biased against los Estados Unidos'},
+      'endpoint1-t': {name: 'Biased towards la Unión Soviética'},
+      'endpoint1-a': {name: 'Biased against la Unión Soviética'},
       'sep1': "---------",
       'sentence': {name: 'Clear annotation'}
     };
   } else if (lang === 'spanish') {
     menuItems = {
-      'endpoint0-t': {name: 'Preferencia hacia $endpoint0'},
-      'endpoint0-a': {name: 'Preferencia contra $endpoint0'},
-      'endpoint1-t': {name: 'Preferencia hacia $endpoint1'},
-      'endpoint1-a': {name: 'Preferencia contra $endpoint1'},
+      'endpoint0-t': {name: 'Preferencia hacia los Estados Unidos'},
+      'endpoint0-a': {name: 'Preferencia contra los Estados Unidos'},
+      'endpoint1-t': {name: 'Preferencia hacia la Unión Soviética'},
+      'endpoint1-a': {name: 'Preferencia contra la Unión Soviética'},
       'sep1': "---------",
       'sentence': {name: 'Elimine la selección'}
     };
   }
   
-  $$('.bias-question .slider').slider({
+  $('.bias-question .slider').slider({
     min: -3, max: 3, step: 1,
     change: function(event, ui) {
         // Get 'us' or 'soviet' depending on which slider this is
-        var country = $$(this).parent().attr('id').split('-')[0];
+        var country = $(this).parent().attr('id').split('-')[0];
         // Change cooresponding hidden field on form
-        $$('#' + country + '-bias-input').val(ui.value);
+        $('#' + country + '-bias-input').val(ui.value);
     }
   }).slider('value', 0);
   
   var sentenceAnnotations = [];
   var annotationClasses = ['sentence', 'endpoint0-t', 'endpoint0-a', 'endpoint1-t', 'endpoint1-a'];
   var i = 0;
-  $$('.sentence').each(function() {
+  $('.sentence').each(function() {
       sentenceAnnotations.push(0);
-      $$(this).attr('data-sentence-index', i);
+      $(this).attr('data-sentence-index', i);
       i++;
   });
-  $$('#sentences-input').val(sentenceAnnotations.join(''));
+  $('#sentences-input').val(sentenceAnnotations.join(''));
   
-  $$.contextMenu({
+  $.contextMenu({
     selector: '.sentence',
     trigger: 'left',
     callback: function(key, options) {
-      $$sentence = $$(this).parents().addBack().filter('.sentence');
-      $$sentence.removeClass().addClass('sentence').addClass(key);
+      $sentence = $(this).parents().addBack().filter('.sentence');
+      $sentence.removeClass().addClass('sentence').addClass(key);
       
-      var sentenceIndex = parseInt($$sentence.attr('data-sentence-index'));
+      var sentenceIndex = parseInt($sentence.attr('data-sentence-index'));
       for(var classIndex = 0; classIndex < annotationClasses.length; classIndex++) {
-          if($$sentence.hasClass(annotationClasses[classIndex])) {
+          if($sentence.hasClass(annotationClasses[classIndex])) {
               sentenceAnnotations[sentenceIndex] = classIndex;
           }
       }
       
       // Update hidden form element for sentences
-      $$('#sentences-input').val(sentenceAnnotations.join(''));
+      $('#sentences-input').val(sentenceAnnotations.join(''));
     },
     items: menuItems
   });
-  $$('.sentence a').on('click', function(e) {
+  $('.sentence a').on('click', function(e) {
     e.preventDefault();
   });
 });
-  </script>
-</body>
-</html>
+  </script></p>
