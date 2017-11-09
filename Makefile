@@ -232,6 +232,10 @@ $(DATADIR)/wikipedia/chunks/$(CORPUS_NAME).$(COMBINED_ID).chunks.$(SAMPLE_SEED).
 	mkdir -p $(dir $@)
 	$(PYTHON) $^ $@ $(SAMPLE_ARTICLES) $(SAMPLE_CHUNKS) $(SAMPLE_SEED) $(wildcard $(DATADIR)/wikipedia/chunks/$(CORPUS_NAME).$(COMBINED_ID).chunks.*.sample.txt)
 	
+
+makechunks: $(DATADIR)/wikipedia/chunks/$(CORPUS_NAME).$(COMBINED_ID).chunks.$(SAMPLE_SEED).sample.txt
+
+
 # Output mechanical turk tasks
 
 $(DATADIR)/wikipedia/mturk/$(CORPUS_NAME).$(COMBINED_ID).$(SAMPLE_SEED).tasks.csv : scripts/sample_to_mturk_tasks.py \
