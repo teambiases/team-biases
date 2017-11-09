@@ -23,9 +23,9 @@ SAMPLE_ARTICLES=15
 SAMPLE_CHUNKS=3
 
 LDA_TOPICS=100
-LDA_PASSES=3
+LDA_PASSES=21
 # set to nothing if you don't want to use MALLET, otherwise set to mallet
-USE_MALLET=true
+USE_MALLET=false
 USE_CORPUS=$(USE_MALLET)
 
 ifeq ($(USE_MALLET),true)
@@ -175,7 +175,7 @@ $(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).$(LDA_TOPICS)topics.pi
 	scripts/build_topics_corpus.py \
 	$(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).titles.$(TARGETLANG).txt \
 	$(DATADIR)/wikipedia/vector/$(CORPUS_NAME).$(COMBINED_ID).parallel.$(VECTOR_TYPE).mm.bz2 \
-	$(DATADIR)/lda/$(CORPUS_PART)$(COMBINED_ID).parallel.$(LDA_TOPICS)t.lda.pickle
+	$(DATADIR)/lda/$(CORPUS_PART)$(COMBINED_ID).parallel.$(LDA_TOPICS)t.lda.pickle 
 	mkdir -p $(dir $@)
 	$(PYTHON) $^ $@
 	
@@ -184,7 +184,7 @@ $(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).$(LDA_TOPICS)topics.pi
 $(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).$(LDA_TOPICS)topics.analysis.csv : \
 	scripts/analyze_topics_corpus.py \
 	$(DATADIR)/wikipedia/corpus/$(CORPUS_NAME).$(COMBINED_ID).$(LDA_TOPICS)topics.pickle \
-	$(DATADIR)/lda/$(COMBINED_ID).parallel.$(LDA_TOPICS)t.lda$(USE_MALLET).pickle
+	$(DATADIR)/lda/$(COMBINED_ID).parallel.$(LDA_TOPICS)t.lda.pickle
 	mkdir -p $(dir $@)
 	$(PYTHON) $^ $@
 	
