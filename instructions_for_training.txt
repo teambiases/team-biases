@@ -1,0 +1,4 @@
+python scripts/score_chunks.py  ~/team-biases/data/test_logistic_model.pickle ~/team-biases/data/wikipedia/chunks/coldwar.es-en-ru-wiki-20170901.chunks.es.pickle ~/team-biases/data/wikipedia/chunks/coldwar.es-en-ru-wiki-20170120.chunks.mar2017.sample.txt es ~/team-biases/data/test_11.9_scores.csv
+
+
+python scripts/train_logistic_topic_bias_model.py  ~/team-biases/data/wikipedia/corpuscp1/coldwar.es-en-ru-wiki-20170901.100topics.pickle ~/team-biases/data/ldacp1/es-en-ru-wiki-20170901.parallel.100t.lda.pickle ~/team-biases/data/test_logistic_model.pickle

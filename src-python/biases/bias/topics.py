@@ -110,7 +110,8 @@ class LogisticTopicsBiasModel:
     def train(self):
         en_array = self.en[2]
         rus_array = self.rus[2]
-        Engl = np.hstack((np.zeros(len(en_array)),np.ones(len(rus_array))))  # ENGLISH = 0
+        print(en_array)
+        Engl = np.hstack((np.zeros(len(en_array)),np.ones(len(rus_array))))
         Freq = np.concatenate((en_array,rus_array))
         model = make_pipeline(VarianceThreshold(), LogisticRegression())
         self.log_model = model.fit(Freq,Engl)
@@ -124,7 +125,7 @@ class LogisticTopicsBiasModel:
         freq_dict = self.lda_model.id2word
         bow = freq_dict.doc2bow(words)
         topics_vector = np.array(sparse2dense(self.lda_model[bow],self.lda_model.num_topics))
-        #print(topics_vector)
+        print(topics_vector,'\n',np.sum(topics_vector))
         #print(self.log_model)
         score = self.log_model.predict_proba(topics_vector.reshape(1,-1))
         result=score[0][0]
